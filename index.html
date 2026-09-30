@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Live: El Profesor Virtual y Superasistente de IA — Tutorial</title>
+<style>
+:root{
+  --bg:#0a0e1a;
+  --card:#0f172a;
+  --border:#1e3a5f;
+  --accent:#00d4ff;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --purple:#a855f7;
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* PROGRESS BAR */
+#progress-wrap{
+  position:fixed;top:0;left:0;width:100%;height:4px;
+  background:#111827;z-index:1200;
+}
+#progress-bar{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--purple),var(--green));
+  transition:width .15s ease-out;
+  box-shadow:0 0 10px var(--accent);
+}
+/* NAVBAR */
+nav#navbar{
+  position:fixed;top:4px;left:0;width:100%;
+  background:rgba(10,14,26,.96);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  z-index:1100;
+  overflow-x:auto;
+  overflow-y:hidden;
+  white-space:nowrap;
+  scrollbar-width:thin;
+  scrollbar-color:var(--accent) transparent;
+}
+nav#navbar::-webkit-scrollbar{height:5px}
+nav#navbar::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+nav#navbar ul{
+  display:inline-flex;list-style:none;
+  padding:0 6px;margin:0;
+}
+nav#navbar li{display:inline-block}
+nav#navbar button{
+  background:transparent;border:none;color:var(--muted);
+  font-family:inherit;font-size:.82rem;font-weight:600;
+  padding:14px 14px;cursor:pointer;
+  border-bottom:3px solid transparent;
+  transition:.2s;white-space:nowrap;letter-spacing:.3px;
+}
+nav#navbar button:hover{color:var(--text);background:rgba(0,212,255,.06)}
+nav#navbar button.active{
+  color:var(--accent);border-bottom-color:var(--accent);
+  text-shadow:0 0 8px rgba(0,212,255,.6);
+}
+/* SECTIONS */
+main{padding-top:70px}
+section.page{display:none;animation:fadeIn .4s ease}
+section.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.container{max-width:1120px;margin:0 auto;padding:24px 18px 60px}
+
+/* HOME */
+.hero-badge{
+  display:inline-block;background:rgba(0,212,255,.1);
+  border:1px solid var(--accent);color:var(--accent);
+  font-size:.72rem;font-weight:700;letter-spacing:1.5px;
+  padding:5px 14px;border-radius:20px;margin-bottom:16px;
+  text-transform:uppercase;
+}
+h1.hero-title{
+  font-size:clamp(1.7rem,4.5vw,2.9rem);line-height:1.15;
+  font-weight:800;margin-bottom:14px;
+  background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--purple) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero-sub{font-size:1.05rem;color:var(--muted);margin-bottom:10px;max-width:820px}
+.hero-author{color:var(--accent);font-weight:600;margin-bottom:26px;font-size:.95rem}
+
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:26px 0}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.metric .num{font-size:1.5rem;font-weight:800;color:var(--accent);display:block}
+.metric .lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+.quote{
+  border-left:4px solid var(--purple);background:rgba(168,85,247,.08);
+  padding:18px 22px;border-radius:0 12px 12px 0;margin:26px 0;
+  font-style:italic;color:#d8b4fe;font-size:1.02rem;
+}
+.quote::before{content:"“";font-size:2rem;color:var(--purple);line-height:0;vertical-align:-.3em;margin-right:6px}
+
+/* CARDS */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:20px 22px;margin:16px 0;
+  transition:.25s;
+}
+.card:hover{border-color:rgba(0,212,255,.5);box-shadow:0 4px 20px rgba(0,212,255,.07)}
+.card h3{
+  color:var(--accent);font-size:1.15rem;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;font-weight:700;
+}
+.card h4{color:#fff;font-size:1rem;margin:14px 0 8px;font-weight:700}
+.card p,.card li{color:#cbd5e1;font-size:.94rem}
+.card ul,.card ol{margin-left:20px;margin-top:6px}
+.card li{margin-bottom:5px}
+
+/* SECTION HEADERS */
+.section-header{margin-bottom:22px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.section-header .tag{
+  display:inline-block;background:rgba(0,212,255,.12);color:var(--accent);
+  font-size:.7rem;font-weight:700;letter-spacing:1.5px;
+  padding:4px 10px;border-radius:6px;text-transform:uppercase;margin-bottom:10px;
+}
+.section-header h2{font-size:clamp(1.4rem,3.5vw,2rem);font-weight:800;color:#fff}
+
+/* CALLOUTS */
+.callout{
+  border-radius:10px;padding:14px 18px;margin:14px 0;
+  border-left:4px solid;font-size:.92rem;
+}
+.callout strong{display:block;margin-bottom:4px;font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
+.callout.info{background:rgba(0,212,255,.08);border-color:var(--accent);color:#a5f3fc}
+.callout.example{background:rgba(34,197,94,.08);border-color:var(--green);color:#bbf7d0}
+.callout.warn{background:rgba(245,158,11,.08);border-color:var(--amber);color:#fde68a}
+.callout.error{background:rgba(239,68,68,.08);border-color:var(--red);color:#fecaca}
+
+/* STEPS */
+.steps{counter-reset:step;margin:14px 0}
+.step{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:18px 20px 18px 62px;
+  margin-bottom:14px;position:relative;
+}
+.step::before{
+  counter-increment:step;content:counter(step);
+  position:absolute;left:16px;top:18px;
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  color:#fff;font-weight:800;font-size:.9rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.step h4{color:#fff;font-size:1rem;margin-bottom:8px;font-weight:700}
+.step p,.step li{color:#cbd5e1;font-size:.92rem}
+
+/* PROMPT BLOCK */
+.prompt{
+  background:#050810;border:1px solid var(--purple);
+  border-radius:10px;padding:14px 16px;margin:10px 0;
+  font-family:'Consolas','Monaco',monospace;font-size:.88rem;
+  color:#e9d5ff;position:relative;overflow-x:auto;
+}
+.prompt::before{
+  content:"PROMPT";position:absolute;top:-9px;left:12px;
+  background:var(--purple);color:#fff;font-size:.62rem;
+  font-weight:800;padding:2px 8px;border-radius:4px;letter-spacing:1px;
+}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;margin:14px 0;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+thead{background:#0a1226}
+th{
+  padding:12px 14px;text-align:left;color:var(--accent);
+  font-weight:700;font-size:.78rem;letter-spacing:.6px;
+  text-transform:uppercase;border-bottom:2px solid var(--border);
+}
+td{padding:11px 14px;border-bottom:1px solid var(--border);color:#cbd5e1;vertical-align:top}
+tbody tr:hover{background:rgba(0,212,255,.04)}
+tbody tr:last-child td{border-bottom:none}
+
+/* BADGES */
+.badge{
+  display:inline-block;padding:2px 8px;border-radius:5px;
+  font-size:.7rem;font-weight:700;letter-spacing:.5px;
+}
+.badge.accent{background:rgba(0,212,255,.15);color:var(--accent)}
+.badge.green{background:rgba(34,197,94,.15);color:var(--green)}
+.badge.amber{background:rgba(245,158,11,.15);color:var(--amber)}
+.badge.red{background:rgba(239,68,68,.15);color:var(--red)}
+.badge.purple{background:rgba(168,85,247,.15);color:var(--purple)}
+
+/* CHECKLIST */
+.checklist{list-style:none;margin-left:0 !important}
+.checklist li{
+  padding-left:28px;position:relative;margin-bottom:8px;
+}
+.checklist li::before{
+  content:"✓";position:absolute;left:0;top:0;
+  color:var(--green);font-weight:800;font-size:1rem;
+}
+
+/* ACCORDION */
+.acc{background:var(--card);border:1px solid var(--border);border-radius:10px;margin:10px 0;overflow:hidden}
+.acc-head{
+  padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;
+  align-items:center;font-weight:700;color:#fff;font-size:.95rem;
+  transition:.2s;
+}
+.acc-head:hover{background:rgba(0,212,255,.05)}
+.acc-head::after{content:"+";color:var(--accent);font-size:1.3rem;font-weight:400;transition:.3s}
+.acc.open .acc-head::after{transform:rotate(45deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease;padding:0 18px}
+.acc.open .acc-body{max-height:1400px;padding-bottom:16px}
+/* Acordeones de ejercicios: contenido más largo */
+.acc.exercise .acc-body{max-height:0}
+.acc.exercise.open .acc-body{max-height:3600px;padding-bottom:18px}
+.acc.exercise .acc-head span.head-title{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;padding-right:8px}
+
+/* SUMMARY BOX */
+.summary{
+  background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(168,85,247,.08));
+  border:1px solid var(--border);border-radius:12px;
+  padding:20px 22px;margin:20px 0;
+}
+.summary h4{color:var(--accent);margin-bottom:12px;font-size:1rem;letter-spacing:.5px;text-transform:uppercase}
+.summary ul{margin-left:18px}
+.summary li{color:#cbd5e1;font-size:.92rem;margin-bottom:6px}
+
+/* SVG ANIMADO */
+#hero-svg-wrap{
+  width:100%;margin:0 auto 26px;
+  border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:0 8px 40px rgba(0,212,255,.12);
+  background:#070b14;
+}
+#hero-svg-wrap svg{display:block;width:100%;height:auto}
+
+/* BACK TO TOP */
+#toTop{
+  position:fixed;bottom:22px;right:22px;z-index:1000;
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  border:none;color:#fff;font-size:1.2rem;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,212,255,.4);
+  display:none;align-items:center;justify-content:center;
+  transition:.25s;
+}
+#toTop.show{display:flex}
+#toTop:hover{transform:translateY(-3px);box-shadow:0 6px 26px rgba(0,212,255,.6)}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);
+  background:#070b14;
+  padding:30px 20px;text-align:center;
+  margin-top:40px;
+}
+footer p{color:var(--muted);font-size:.85rem;margin:5px 0}
+footer .latin{color:var(--purple);font-style:italic;font-weight:600;margin-top:12px}
+
+/* CREDITS */
+.credits-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:28px;text-align:center;
+  max-width:720px;margin:20px auto;
+}
+.credits-box h3{color:var(--accent);font-size:1.4rem;margin-bottom:8px}
+.credits-box .author{color:#fff;font-size:1.15rem;font-weight:700;margin:14px 0 6px}
+.credits-box .meta{color:var(--muted);font-size:.9rem;margin:4px 0}
+.credits-box .edu{
+  display:inline-block;margin-top:16px;
+  background:rgba(34,197,94,.12);border:1px solid var(--green);
+  color:var(--green);padding:6px 16px;border-radius:20px;
+  font-size:.78rem;font-weight:700;letter-spacing:.5px;
+}
+
+/* LINKS */
+a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a:hover{color:#fff;border-bottom-color:#fff}
+
+/* FLOW DIAGRAM */
+.flow{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  background:#050810;border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;margin:12px 0;
+  font-family:'Consolas','Monaco',monospace;font-size:.82rem;color:#93c5fd;
+}
+.flow span{background:rgba(0,212,255,.1);padding:4px 10px;border-radius:6px;color:var(--accent);white-space:nowrap}
+.flow .arrow{color:var(--purple);font-weight:800}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .container{padding:18px 12px 50px}
+  .card{padding:16px 16px}
+  .step{padding-left:54px}
+  .step::before{width:28px;height:28px;left:13px;font-size:.8rem}
+  nav#navbar button{padding:12px 11px;font-size:.76rem}
+  main{padding-top:64px}
+  th,td{padding:9px 10px;font-size:.82rem}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s !important;transition-duration:.001s !important}
+}
+</style>
+</head>
+<body>
+
+<div id="progress-wrap"><div id="progress-bar"></div></div>
+
+<nav id="navbar">
+  <ul>
+    <li><button data-target="home" class="active">🏠 INICIO</button></li>
+    <li><button data-target="cap1">FUNDAMENTOS</button></li>
+    <li><button data-target="cap2">CONFIGURACIÓN</button></li>
+    <li><button data-target="cap3">CASOS PRÁCTICOS</button></li>
+    <li><button data-target="cap4">PROMPTS Y PRÁCTICAS</button></li>
+    <li><button data-target="cap5">CIERRE Y GLOSARIO</button></li>
+    <li><button data-target="ejercicios">EJERCICIOS</button></li>
+    <li><button data-target="fuentes">FUENTES</button></li>
+    <li><button data-target="creditos">CRÉDITOS</button></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ======================= HOME ======================= -->
+<section id="home" class="page active">
+  <div class="container">
+
+    <div id="hero-svg-wrap">
+      <div id="svg-slot-home"></div>
+    </div>
+
+    <span class="hero-badge">◆ Tutorial Técnico Interactivo</span>
+    <h1 class="hero-title">Gemini Live: El Profesor Virtual y Superasistente de Inteligencia Artificial</h1>
+    <p class="hero-sub">Aprende a dominar la conversación por voz en tiempo real y la compartición de pantalla para convertir Gemini Live en tu tutor personal 24/7 y en tu asistente definitivo, sin escribir una sola línea de texto.</p>
+    <p class="hero-author">✍️ by Rubén Sbarsky</p>
+
+    <div class="metrics">
+      <div class="metric"><span class="num">5</span><span class="lbl">Capítulos</span></div>
+      <div class="metric"><span class="num">6</span><span class="lbl">Casos Prácticos</span></div>
+      <div class="metric"><span class="num">15</span><span class="lbl">Ejercicios</span></div>
+      <div class="metric"><span class="num">24/7</span><span class="lbl">Disponibilidad</span></div>
+    </div>
+
+    <div class="card">
+      <h3>📌 Objetivo del Tutorial</h3>
+      <p>Este tutorial ha sido diseñado para que cualquier persona, sin importar su nivel de experiencia previa, aprenda a dominar <strong>Gemini Live</strong> (utilizado a través de los modelos avanzados como Gemini 3.8 Live). El propósito es enseñarte a transformar esta herramienta de inteligencia artificial en tu <strong>profesor particular 24/7 y superasistente personal</strong>.</p>
+      <p style="margin-top:10px">Aprenderás a interactuar mediante <strong>voz en tiempo real</strong> y <strong>compartición de pantalla</strong>, eliminando por completo la necesidad de escribir o teclear comandos.</p>
+    </div>
+
+    <div class="quote">Si no puedes explicarlo de forma sencilla, es que no lo entiendes lo suficientemente bien.</div>
+
+    <div class="card">
+      <h3>🧭 Cómo navegar este tutorial</h3>
+      <p>Utiliza la barra de navegación superior para moverte entre las secciones. Cada capítulo es independiente y conserva íntegramente el contenido del documento original. Puedes volver siempre al inicio pulsando <span class="badge accent">INICIO</span> y subir rápidamente con el botón flotante inferior derecho.</p>
+      <p style="margin-top:10px">La sección <span class="badge purple">EJERCICIOS</span> contiene 15 actividades prácticas organizadas por bloques, con solución paso a paso, explicación causal y errores típicos a evitar.</p>
+    </div>
+
+    <footer>
+      <p>📚 Tutorial solo con fines Educativos y Divulgación</p>
+      <p>👨‍💻 Créditos: Rubén Sbarsky</p>
+      <p>📅 FECHA: 29/09/2026 · Hora: 05:57:16</p>
+      <p class="latin">Fiat iustitia, ruat caelum.</p>
+    </footer>
+
+  </div>
+</section>
+
+<!-- ======================= CAPÍTULO 1 ======================= -->
+<section id="cap1" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Fundamentos</span>
+      <h2>Introducción a Gemini Live y Fundamentos Básicos</h2>
+    </div>
+
+    <div class="card">
+      <h3>1.1. ¿Qué es Gemini Live y para qué sirve?</h3>
+      <p><strong>Gemini Live</strong> es un modelo conversacional de inteligencia artificial desarrollado por Google que permite mantener <strong>conversaciones por voz en tiempo real con latencia mínima</strong>. A diferencia de los chats tradicionales donde debes escribir texto, Gemini Live escucha tu voz, interpreta lo que ves en tu pantalla y te responde de forma inmediata con una voz natural.</p>
+      <p style="margin-top:10px">Sirve principalmente como un <strong>tutor personalizado disponible las 24 horas del día, los 7 días de la semana</strong>. Puede guiarte paso a paso en el estudio de cualquier disciplina, resolver dudas al instante, traducir documentos complejos y analizar información visual en directo.</p>
+      <div class="flow">
+        <span>[Usuario habla o muestra su pantalla]</span><span class="arrow">→</span>
+        <span>[Gemini Live procesa en tiempo real]</span><span class="arrow">→</span>
+        <span>[Explicación por voz y texto instantáneo]</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>1.2. ¿Por qué es importante aprender a utilizarlo?</h3>
+      <ol>
+        <li><strong>Elimina la barrera del teclado</strong>: No necesitas estructurar textos largos ni escribir código; simplemente conversas como si hablaras con un profesor humano.</li>
+        <li><strong>Ahorro masivo de tiempo</strong>: Explicaciones que normalmente tomarían horas de lectura o investigación en internet son resumidas e interpretadas en pocos segundos.</li>
+        <li><strong>Comprensión adaptativa</strong>: Si no entiendes una explicación técnica, puedes pedirle a Gemini que te lo explique de forma sencilla o mediante analogías cotidianas.</li>
+        <li><strong>Asistencia multimodal</strong>: Al poder ver tu pantalla, analiza gráficos, esquemas, documentos, plataformas de software y sitios web al mismo tiempo que hablas con él.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>1.3. Situaciones reales de uso</h3>
+      <ul>
+        <li><strong>Aprendizaje de idiomas</strong>: Practicar la fluidez en inglés o cualquier otro idioma y recibir correcciones de pronunciación en tiempo real.</li>
+        <li><strong>Comprensión de diagramas técnicos</strong>: Analizar esquemas complejos (como el motor de un avión) sin tener conocimientos previos de ingeniería.</li>
+        <li><strong>Resolución de problemas matemáticos</strong>: Descifrar ecuaciones o modelos numéricos paso a paso con explicaciones adaptadas a tu nivel.</li>
+        <li><strong>Guía en desarrollo de software</strong>: Configurar proyectos y herramientas de desarrollo (como Codex) asistido por voz.</li>
+        <li><strong>Traducción de documentos históricos</strong>: Interpretar textos antiguos o manuscritos medievales en latín.</li>
+        <li><strong>Análisis financiero y de mercado</strong>: Navegar por páginas de bolsa (como el Ibex 35) y redactar informes ejecutivos automáticos.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>📊 Tabla Comparativa 1.1: Interacción Tradicional vs. Gemini Live</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Característica</th><th>Búsqueda / Chat Tradicional</th><th>Gemini Live</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Método de entrada</strong></td><td>Texto escrito mediante teclado</td><td>Voz hablada y captación de pantalla en directo</td></tr>
+            <tr><td><strong>Velocidad de respuesta</strong></td><td>Lectura manual de múltiples enlaces</td><td>Respuesta hablada inmediata en tiempo real</td></tr>
+            <tr><td><strong>Nivel de explicación</strong></td><td>Genérico o técnico según la fuente</td><td>Adaptable: de lenguaje técnico a coloquial</td></tr>
+            <tr><td><strong>Capacidad de corrección</strong></td><td>Pasiva (tienes que identificar tu error)</td><td>Activa (detecta errores de pronunciación o pasos)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="summary">
+      <h4>📝 Resumen del Capítulo 1</h4>
+      <ul>
+        <li><strong>Gemini Live</strong> es un superasistente conversacional por voz que funciona como un tutor personal 24/7.</li>
+        <li>Permite aprender cualquier materia conversando sin necesidad de teclear.</li>
+        <li>Su capacidad de <strong>ver la pantalla</strong> (Share Screen) le permite analizar imágenes, software y datos web en directo.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CAPÍTULO 2 ======================= -->
+<section id="cap2" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Configuración</span>
+      <h2>Guía Paso a Paso de Configuración Inicial en Google AI Studio</h2>
+    </div>
+
+    <div class="callout info">
+      <strong>INFO</strong>
+      Para utilizar Gemini Live de forma gratuita, utilizaremos el entorno de <strong>Google AI Studio</strong>.
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <h4>Paso 1: Acceso a la plataforma</h4>
+        <ol>
+          <li>Abre tu navegador web (preferiblemente Google Chrome).</li>
+          <li>Dirígete a la plataforma oficial de <strong>Google AI Studio</strong>.</li>
+        </ol>
+        <div class="callout example" style="margin-top:10px">
+          <strong>Motivo de la acción</strong>
+          Google AI Studio proporciona acceso directo a las últimas versiones de los modelos conversacionales en tiempo real de forma gratuita.
+        </div>
+        <div class="callout error">
+          <strong>Error frecuente</strong>
+          Intentar buscar el modelo en herramientas estándar sin soporte de voz interactivo en tiempo real.
+        </div>
+        <div class="callout warn">
+          <strong>Cómo evitarlo</strong>
+          Asegúrate de ingresar a la interfaz de prueba de modelos Live de Google AI Studio.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4>Paso 2: Selección del Modelo de Inteligencia Artificial</h4>
+        <ol>
+          <li>En el panel superior derecho, despliega la lista de modelos.</li>
+          <li>Selecciona <strong>Gemini 3.8 Live</strong> o <strong>Gemini 3.8 Live Extended Thinking</strong>.</li>
+        </ol>
+        <div class="callout example" style="margin-top:10px">
+          <strong>Motivo de la acción</strong>
+          El modelo <strong>Gemini 3.8 Live</strong> ofrece respuestas instantáneas ideales para la conversación fluida. El modelo <strong>Extended Thinking</strong> añade mayor capacidad de razonamiento para tareas complejas.
+        </div>
+        <div class="callout info">
+          <strong>Consejo profesional</strong>
+          Para la mayoría de tareas de tutoría e idiomas, <strong>Gemini 3.8 Live</strong> ofrece la velocidad y precisión óptimas.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4>Paso 3: Configuración de la Instrucción del Sistema (System Instruction)</h4>
+        <ol>
+          <li>Haz clic en el apartado <strong>System Instruction</strong> (Instrucciones del sistema).</li>
+          <li>Introduce el siguiente prompt o instrucción inicial:</li>
+        </ol>
+        <div class="prompt">
+          "Quiero que todas las respuestas me las des en español de España y además cuando finalices cualquier conversación o cualquier respuesta no quiero que me des ideas por ejemplo ¿quieres que te haga esto? ¿quieres que te haga lo otro? ¿necesitas algo más? Simplemente quiero una conversación normal."
+        </div>
+        <p>3. Cierra la ventana de instrucciones.</p>
+        <div class="callout example" style="margin-top:10px">
+          <strong>Motivo de la acción</strong>
+          Esto evita que la IA agregue preguntas de cierre molestas o muletillas en cada respuesta, logrando una interacción natural.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4>Paso 4: Configuración de la Voz y del Auricular/Micrófono</h4>
+        <ol>
+          <li>En el menú lateral, ajusta el selector de <strong>Voz</strong> según tu preferencia.</li>
+          <li>Verifica que tu micrófono y altavoces estén activados.</li>
+        </ol>
+        <div class="callout example" style="margin-top:10px">
+          <strong>Motivo de la acción</strong>
+          Garantizar una transmisión de audio clara sin interrupciones ni acoples.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4>Paso 5: Compartir Pantalla (Share Screen)</h4>
+        <ol>
+          <li>Haz clic en el botón <strong>Share Screen</strong> (Compartir pantalla).</li>
+          <li>Aparecerá una ventana con tres opciones:
+            <ul>
+              <li><strong>Pestaña de Chrome</strong></li>
+              <li><strong>Ventana</strong></li>
+              <li><strong>Toda la pantalla</strong></li>
+            </ul>
+          </li>
+          <li>Selecciona <strong>Toda la pantalla</strong> (o la pantalla principal si usas varios monitores) y pulsa <strong>Compartir</strong>.</li>
+        </ol>
+        <div class="flow" style="margin-top:12px">
+          <span>[Botón Share Screen]</span><span class="arrow">→</span>
+          <span>[Seleccionar "Toda la pantalla"]</span><span class="arrow">→</span>
+          <span>[Hacer clic en Compartir]</span><span class="arrow">→</span>
+          <span>[Gemini visualiza tu monitor]</span>
+        </div>
+        <div class="callout example" style="margin-top:10px">
+          <strong>Motivo de la acción</strong>
+          Permite que Gemini vea exactamente lo mismo que tú estás observando en tu monitor.
+        </div>
+        <div class="callout info">
+          <strong>Observación importante</strong>
+          Una vez compartida la pantalla, aparecerá una ventana flotante indicando que la transmisión está activa.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>✅ Lista de Comprobación (Checklist) para Iniciar Sesión</h3>
+      <ul class="checklist">
+        <li>Entorno de Google AI Studio cargado correctamente.</li>
+        <li>Modelo <code>Gemini 3.8 Live</code> seleccionado.</li>
+        <li>System Instruction configurado en español y sin preguntas de cierre.</li>
+        <li>Micrófono y altavoces probados.</li>
+        <li>Pantalla compartida mediante <em>Share Screen</em>.</li>
+      </ul>
+    </div>
+
+    <div class="summary">
+      <h4>📝 Resumen del Capítulo 2</h4>
+      <ul>
+        <li>La configuración se realiza en Google AI Studio seleccionando el modelo <code>Gemini 3.8 Live</code>.</li>
+        <li>Las <strong>System Instructions</strong> permiten personalizar el idioma y eliminar muletillas innecesarias.</li>
+        <li>La función <strong>Share Screen</strong> conecta la visión de la IA con tu pantalla.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CAPÍTULO 3 ======================= -->
+<section id="cap3" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Casos Prácticos</span>
+      <h2>Casos Prácticos Paso a Paso con Prompts Reales</h2>
+    </div>
+
+    <!-- 3.1 -->
+    <div class="card">
+      <h3>3.1. Caso Práctico 1: Aprendizaje y Práctica de Idiomas (Inglés Cotidiano)</h3>
+      <h4>🎯 Objetivo</h4>
+      <p>Aprender frases básicas en inglés para situaciones cotidianas (tiendas y restaurantes) y corregir la pronunciación.</p>
+
+      <h4>Paso 1: Iniciar la conversación por voz</h4>
+      <p><strong>Acción:</strong> Di en voz alta a Gemini:</p>
+      <div class="prompt">"Hola, resulta de que estoy aprendiendo inglés y mi inglés es una auténtica porquería, entonces necesitaría saber cómo puedo empezar simplemente para me desenvolverme en lo típico y cotidiano del día a día, si voy a una tienda o si necesito un restaurante."</div>
+      <p><strong>Motivo:</strong> Establecer el contexto de aprendizaje y las situaciones que te interesan.</p>
+
+      <h4>Paso 2: Solicitud de ejemplos prácticos</h4>
+      <p><strong>Acción:</strong> Escucha la respuesta inicial de Gemini y responde:</p>
+      <div class="prompt">"Dame unos ejemplos y a ver lo que podemos hacer y dime lo que tengo que hacer."</div>
+      <p><strong>Respuesta de Gemini:</strong> Te indicará frases básicas como <em>"How much is this?"</em> (para tiendas) e <em>"I would like to order"</em> (para restaurantes) y te pedirá que las repitas.</p>
+
+      <h4>Paso 3: Práctica de pronunciación y corrección interactiva</h4>
+      <ul>
+        <li><strong>Acción (Prueba correcta):</strong> Repite en voz alta: <em>"How much is this?"</em>.
+          <br><em>Resultado:</em> Gemini confirmará que la pronunciación es correcta.</li>
+        <li><strong>Acción (Prueba con error intencional):</strong> Intenta decir la segunda frase de forma errónea pronunciando algo como <em>"gurly or"</em>.
+          <br><em>Resultado:</em> Gemini detectará el error, te dirá amablemente que no es correcto y te ofrecerá repetirlo.</li>
+        <li><strong>Acción (Corrección):</strong> Pronuncia correctamente: <em>"I would like to order"</em>.
+          <br><em>Resultado:</em> Gemini validará que la pronunciación ahora es adecuada y fácil de entender.</li>
+      </ul>
+      <div class="flow">
+        <span>[Usuario pronuncia incorrectamente: "gurly or"]</span><span class="arrow">→</span>
+        <span>[Gemini detecta el fallo]</span><span class="arrow">→</span>
+        <span>[Usuario repite: "I would like to order"]</span><span class="arrow">→</span>
+        <span>[Gemini aprueba]</span>
+      </div>
+    </div>
+
+    <!-- 3.2 -->
+    <div class="card">
+      <h3>3.2. Caso Práctico 2: Interpretación de Esquemas Técnicos (Motor de Aviación)</h3>
+      <h4>🎯 Objetivo</h4>
+      <p>Comprender el funcionamiento de una pieza técnica compleja sin conocimientos previos de ingeniería.</p>
+
+      <h4>Paso 1: Mostrar la imagen en pantalla</h4>
+      <p><strong>Acción:</strong> Abre en tu monitor el esquema técnico o diagrama del motor de aviación.</p>
+
+      <h4>Paso 2: Consulta técnica inicial</h4>
+      <p><strong>Acción:</strong> Habla directamente a Gemini mientras ves el gráfico:</p>
+      <div class="prompt">"Mira Gemini, estoy estudiando aviación y resulta de que en clase estaba medio dormido y sinceramente me he pasado esta parte de aquí de este esquema que sinceramente no sé lo que es. A ver si me puedes tú de una manera rápida y concisa describirme y decirme lo que es y cómo funciona."</div>
+      <p><strong>Respuesta de Gemini:</strong> Identificará que la pieza señalada es el <strong>compresor</strong> y te explicará técnicamente que su función es aumentar la presión y la temperatura del aire que entra al motor antes de llegar a la cámara de combustión.</p>
+
+      <h4>Paso 3: Solicitud de simplificación (Analogía cotidiana)</h4>
+      <p><strong>Acción:</strong> Si la explicación técnica te resulta difícil de visualizar, pide una analogía:</p>
+      <div class="prompt">"¿Me lo podrías explicar de otra manera?"</div>
+      <p><strong>Respuesta de Gemini:</strong></p>
+      <div class="callout example">
+        <strong>Analogía sencilla de Gemini</strong>
+        "Imagina el compresor como un <strong>embudo gigante</strong> que fuerza una gran cantidad de aire a pasar por un espacio mucho más pequeño, aumentando drásticamente su presión y temperatura."
+      </div>
+      <div class="flow">
+        <span>[Explicación Técnica: "Aumenta la presión y temperatura del aire..."]</span><span class="arrow">→</span>
+        <span>[Prompt: "¿Me lo explicas de otra manera?"]</span><span class="arrow">→</span>
+        <span>[Analogía: "Un embudo gigante..."]</span>
+      </div>
+    </div>
+
+    <!-- 3.3 -->
+    <div class="card">
+      <h3>3.3. Caso Práctico 3: Resolución de Ecuaciones y Problemas Matemáticos</h3>
+      <h4>🎯 Objetivo</h4>
+      <p>Resolver un problema matemático comparativo y comprender la lógica tanto de forma sencilla como técnica.</p>
+
+      <h4>Paso 1: Desplegar el problema en pantalla</h4>
+      <p><strong>Acción:</strong> Muestra en la pantalla el gráfico o la ecuación matemática.</p>
+      <p><strong>Escenario:</strong> Un modelo comparativo donde Vito tiene $12 y Gai tiene $36.</p>
+
+      <h4>Paso 2: Consulta en modo coloquial</h4>
+      <p><strong>Acción:</strong> Pregunta a Gemini:</p>
+      <div class="prompt">"Mira Gemini, resulta de que tengo este problema matemático o esta ecuación y no tengo ni idea de lo que significa. A ver si me puedes explicar, pero cuidado, en un modo que lo entienda de un modo normal, porque con cosas técnicas la verdad que no me entero."</div>
+      <p><strong>Explicación coloquial de Gemini:</strong> Explicará que se compara el dinero de Vito ($12) y Gai ($36), señalando que la cantidad de Vito representa exactamente <strong>una tercera parte</strong> de la de Gai, ya que 12 es la tercera parte de 36.</p>
+
+      <h4>Paso 3: Solicitud de la versión técnica formal</h4>
+      <p><strong>Acción:</strong> Si necesitas presentar la respuesta de forma académica:</p>
+      <div class="prompt">"Y de una manera un poquito más técnica, ¿me lo podrías explicar?"</div>
+      <p><strong>Explicación técnica de Gemini:</strong></p>
+      <div class="callout example">
+        <strong>Respuesta formal</strong>
+        "Esta estructura representa un <strong>modelo de comparación multiplicativa</strong>, donde la cantidad de referencia (el importe de Gai) se escala por un factor relacional."
+      </div>
+    </div>
+
+    <!-- 3.4 -->
+    <div class="card">
+      <h3>3.4. Caso Práctico 4: Guía en Desarrollo de Software y Agentes (Plataforma Codex)</h3>
+      <h4>🎯 Objetivo</h4>
+      <p>Aprender a configurar un proyecto de desarrollo de software y elegir el modelo de IA más eficiente para no malgastar recursos.</p>
+
+      <h4>Paso 1: Verificación de pantalla en la aplicación Codex</h4>
+      <p><strong>Acción:</strong> Abre la interfaz de Codex en tu monitor y pregunta:</p>
+      <div class="prompt">"Hola Gemini, ¿estás viendo la pantalla de Codex?"</div>
+      <p><strong>Confirmación de Gemini:</strong> Confirmará que ve la ventana de la aplicación Codex.</p>
+
+      <h4>Paso 2: Guía de creación del proyecto</h4>
+      <p><strong>Acción:</strong> Solicita instrucciones paso a paso:</p>
+      <div class="prompt">"Resulta de que yo no soy muy entendido en esto de los agentes y quiero crear mi primer proyecto. Quiero que me expliques de una manera rápida pero también muy sencilla que lo pueda entender cómo debo de crear y configurar mi primer proyecto."</div>
+      <p><strong>Pasos guiados por Gemini:</strong></p>
+      <ol>
+        <li>Haz clic en el símbolo <strong>"+"</strong> al lado de <em>Proyectos</em> en el menú izquierdo.</li>
+        <li>Escribe el nombre de tu proyecto.</li>
+        <li>Selecciona y añade la carpeta de origen.</li>
+      </ol>
+
+      <h4>Paso 3: Aclaración sobre permisos de sistema ("Trust Folder")</h4>
+      <p><strong>Acción:</strong> Al seleccionar la carpeta, la aplicación muestra el mensaje <em>"Trust folder"</em>. Pregunta a Gemini:</p>
+      <div class="prompt">"Aquí me pone 'Trust folder', ¿esto qué significa? A ver si voy a romper algo."</div>
+      <p><strong>Explicación de Gemini:</strong> Te aclarará que significa darle permiso a la aplicación para acceder a los archivos del proyecto de forma segura, sin riesgo de dañar el sistema.</p>
+
+      <h4>Paso 4: Optimización de consumo de tokens y elección de modelo</h4>
+      <p><strong>Acción:</strong> Pregunta sobre la selección de modelos de IA en el menú desplegable:</p>
+      <div class="prompt">"Aquí abajo a la izquierda hay modelos de inteligencia artificial. Para un uso normal y no gastar muchos tokens, ¿cuál debería de utilizar?"</div>
+      <p><strong>Recomendación de Gemini:</strong> Seleccionar el modelo <strong>GPT-6 Luna Medio</strong>, ya que ofrece el equilibrio perfecto entre rendimiento, calidad y bajo consumo de recursos.</p>
+    </div>
+
+    <!-- 3.5 -->
+    <div class="card">
+      <h3>3.5. Caso Práctico 5: Traducción e Interpretación de Manuscritos Antiguos (Latín Medieval)</h3>
+      <h4>🎯 Objetivo</h4>
+      <p>Traducir e interpretar un manuscrito antiguo de astrología redactado en latín medieval.</p>
+
+      <h4>Paso 1: Mostrar el documento antiguo</h4>
+      <p><strong>Acción:</strong> Coloca en pantalla la imagen del manuscrito medieval.</p>
+
+      <h4>Paso 2: Consulta inicial sobre el manuscrito</h4>
+      <p><strong>Acción:</strong> Di a Gemini:</p>
+      <div class="prompt">"Mira Gemini, tengo un trabajo para ti porque la verdad estoy desbordado. Resulta que estoy estudiando astrología y mi profesor nos ha dado este manuscrito para que lo estudiemos, entendamos lo que es y además que lo traduzcamos. ¿Me puedes explicar el primer párrafo, por ejemplo, qué es lo que dice?"</div>
+      <p><strong>Respuesta de Gemini:</strong> Identificará que el texto está en <strong>latín medieval</strong> y que la primera palabra (<em>"legitur"</em>) se traduce como <em>"se lee"</em> o <em>"leemos"</em>, marcando el inicio de la introducción o comentario.</p>
+
+      <h4>Paso 3: Resumen general del contenido</h4>
+      <p><strong>Acción:</strong> Pide una síntesis comprensible:</p>
+      <div class="prompt">"¿Me puedes hacer un resumen entendible con palabras normales de lo que quiere decir todo este manuscrito?"</div>
+      <p><strong>Explicación de Gemini:</strong> Te indicará que el documento es un <strong>protólogo</strong> o introducción a una obra más extensa, donde se explican los propósitos del libro y se preparan las ideas de los siguientes capítulos.</p>
+    </div>
+
+    <!-- 3.6 -->
+    <div class="card">
+      <h3>3.6. Caso Práctico 6: Análisis Financiero y de Mercado de Valores (Ibex 35)</h3>
+      <h4>🎯 Objetivo</h4>
+      <p>Navegar por una web de bolsa, analizar la situación del mercado e identificar acciones al alza y a la baja para generar un informe preparado para copiar y enviar.</p>
+
+      <h4>Paso 1: Navegar a la web bursátil</h4>
+      <p><strong>Acción:</strong> Abre el portal de información financiera en tu navegador.</p>
+
+      <h4>Paso 2: Guía de navegación verbal</h4>
+      <p><strong>Acción:</strong> Pregunta a Gemini:</p>
+      <div class="prompt">"Mira Gemini, resulta de que mi jefe me ha mandado que haga un análisis del día de hoy de cómo está la bolsa, pero ahora mismo estoy aquí en esta página web y no sé por dónde tirar. ¿Qué debería hacer para ver cómo está el índice a día de hoy?"</div>
+      <p><strong>Instrucción de Gemini:</strong></p>
+      <ol>
+        <li>Haz clic en la opción <strong>Mercados y cotizaciones</strong> en el menú superior.</li>
+        <li>Pulsa sobre <strong>Ibex 35</strong> en la columna desplegada.</li>
+      </ol>
+
+      <h4>Paso 3: Análisis cuantitativo en tiempo real</h4>
+      <p><strong>Acción:</strong> Una vez cargada la tabla de cotizaciones, solicita el diagnóstico financiero:</p>
+      <div class="prompt">"Me aparece todo esto de aquí, pero es que realmente no sé cuál va mejor o peor. A ver si tú de una ojeada me puedes decir realmente cómo está la bolsa y dónde se podría llegar a invertir para que mi jefe gane algo de dinero."</div>
+      <p><strong>Diagnóstico de Gemini:</strong></p>
+      <ul>
+        <li><strong>Índice general:</strong> El Ibex 35 registra una subida del <span class="badge green">0,65%</span>.</li>
+        <li><strong>Valores al alza:</strong> <strong>CaixaBank</strong> (<span class="badge green">+2,33%</span>) y <strong>Acciona</strong> (<span class="badge green">+1,90%</span>).</li>
+        <li><strong>Valores a la baja:</strong> <strong>Repsol</strong> lidera las caídas con un descenso del <span class="badge red">-2,12%</span>.</li>
+      </ul>
+
+      <h4>Paso 4: Generación de informe formateado</h4>
+      <p><strong>Acción:</strong> Pide la redacción final del resumen:</p>
+      <div class="prompt">"Hazme un resumen de todo esto para yo entregárselo mañana a mi jefe que yo pueda copiar y pegar."</div>
+      <p><strong>Resultado:</strong> Gemini generará un texto estructurado en pantalla listo para ser copiado y enviado directamente por correo o mensajería.</p>
+    </div>
+
+    <div class="summary">
+      <h4>📝 Resumen del Capítulo 3</h4>
+      <ul>
+        <li><strong>Idiomas:</strong> Gemini actúa como compañero de conversación corrigiendo la pronunciación al instante.</li>
+        <li><strong>Ingeniería y Ciencias:</strong> Transforma explicaciones complejas en analogías cotidianas (ej. el compresor como un embudo).</li>
+        <li><strong>Matemáticas:</strong> Ofrece explicaciones dobles (modo coloquial vs. modelo de comparación multiplicativa).</li>
+        <li><strong>Software:</strong> Guía paso a paso en entornos de desarrollo y ayuda a optimizar el consumo de tokens eligiendo el modelo adecuado.</li>
+        <li><strong>Finanzas:</strong> Analiza datos en pantalla y redacta informes resumidos listos para enviar.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CAPÍTULO 4 ======================= -->
+<section id="cap4" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Prompts y Prácticas</span>
+      <h2>Catálogo Completo de Prompts, Buenas Prácticas y Errores a Evitar</h2>
+    </div>
+
+    <div class="card">
+      <h3>4.1. Catálogo Completo de Prompts</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Área de Aplicación</th><th>Tipo de Prompt</th><th>Texto Exacto del Prompt / Instrucción</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Configuración inicial</td><td>System Instruction</td><td><em>"Quiero que todas las respuestas me las des en español de España y además cuando finalices cualquier conversación no quiero que me des ideas..."</em></td></tr>
+            <tr><td>Idiomas</td><td>Apertura de sesión</td><td><em>"Estoy aprendiendo inglés y mi inglés es una auténtica porquería... ¿cómo puedo empezar para lo típico y cotidiano?"</em></td></tr>
+            <tr><td>Idiomas</td><td>Petición de ejercicios</td><td><em>"Dame unos ejemplos y a ver lo que podemos hacer y dime lo que tengo que hacer."</em></td></tr>
+            <tr><td>Diagramas técnicos</td><td>Explicación básica</td><td><em>"Estoy estudiando aviación... descríbeme de manera rápida y concisa lo que es y cómo funciona."</em></td></tr>
+            <tr><td>Diagramas técnicos</td><td>Analogía sencilla</td><td><em>"¿Me lo podrías explicar de otra manera?"</em></td></tr>
+            <tr><td>Matemáticas</td><td>Modo sencillo</td><td><em>"Tengo esta ecuación... explicámela en un modo que lo entienda de un modo normal."</em></td></tr>
+            <tr><td>Matemáticas</td><td>Modo técnico</td><td><em>"Y de una manera un poquito más técnica, ¿me lo podrías explicar?"</em></td></tr>
+            <tr><td>Desarrollo (Codex)</td><td>Inicio de proyecto</td><td><em>"Explícame de manera rápida pero muy sencilla cómo debo crear y configurar mi primer proyecto."</em></td></tr>
+            <tr><td>Desarrollo (Codex)</td><td>Control de costes</td><td><em>"Para un uso normal y no gastar muchos tokens, ¿cuál debería utilizar?"</em></td></tr>
+            <tr><td>Manuscritos antiguos</td><td>Traducción</td><td><em>"Estoy estudiando astrología y mi profesor nos ha dado este manuscrito... ¿qué dice el primer párrafo?"</em></td></tr>
+            <tr><td>Finanzas (Bolsa)</td><td>Navegación web</td><td><em>"Mi jefe me ha mandado hacer un análisis de la bolsa... ¿qué debería hacer para ver cómo está el índice hoy?"</em></td></tr>
+            <tr><td>Finanzas (Bolsa)</td><td>Informe de copia rápida</td><td><em>"Hazme un resumen de todo esto para entregárselo a mi jefe que pueda copiar y pegar."</em></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>4.2. Consejos de Profesionales y Trucos Prácticos</h3>
+      <ol>
+        <li><strong>Combina voz y pantalla:</strong> No te limites a hablar; mantén la función <em>Share Screen</em> activa para que Gemini tenga todo el contexto visual de lo que estás haciendo.</li>
+        <li><strong>Solicita dobles explicaciones:</strong> Pide primero una explicación cotidiana para entender el concepto global y luego la explicación técnica para adquirir el vocabulario profesional.</li>
+        <li><strong>Pide corrección activa:</strong> En idiomas o código, indica explícitamente a Gemini que te interrumpa o te corrija si cometes un fallo de pronunciación o sintaxis.</li>
+        <li><strong>Optimiza el consumo de recursos:</strong> En entornos de desarrollo integrados con agentes, consulta a Gemini qué modelos usar para equilibrar calidad y gasto de tokens (como el modelo GPT-6 Luna Medio).</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>4.3. Errores Frecuentes y Cómo Evitarlos</h3>
+      <div class="callout error">
+        <strong>❌ Error 1: Intentar teclear preguntas largas mientras se usa la voz.</strong>
+        <em>Cómo evitarlo:</em> Habla de forma natural sin tocar el teclado. Gemini procesa la voz directamente.
+      </div>
+      <div class="callout error">
+        <strong>❌ Error 2: No configurar las System Instructions.</strong>
+        <em>Cómo evitarlo:</em> Si no agregas las instrucciones de sistema, Gemini te hará preguntas de seguimiento al final de cada respuesta (ej. "¿Quieres que haga algo más?"). Agrega la instrucción para mantener una conversación fluida.
+      </div>
+      <div class="callout error">
+        <strong>❌ Error 3: Dejar la pantalla oculta o compartir la ventana incorrecta.</strong>
+        <em>Cómo evitarlo:</em> Selecciona siempre "Toda la pantalla" si vas a navegar entre diferentes aplicaciones o pestañas durante la sesión.
+      </div>
+      <div class="callout error">
+        <strong>❌ Error 4: Aceptar explicaciones abstractas sin pedir analogías.</strong>
+        <em>Cómo evitarlo:</em> En cuanto escuches un término que no entiendas, interrumpe y di: <em>"¿Me pones una analogía cotidiana de esto?"</em>.
+      </div>
+    </div>
+
+    <div class="summary">
+      <h4>📝 Resumen del Capítulo 4</h4>
+      <ul>
+        <li>Guardar un catálogo de prompts estructurados agiliza la interacción diaria.</li>
+        <li>Utilizar la voz junto a la pantalla compartida maximiza la velocidad de aprendizaje.</li>
+        <li>Ajustar las instrucciones iniciales evita interrupciones molestas en la conversación.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CAPÍTULO 5 ======================= -->
+<section id="cap5" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Cierre y Glosario</span>
+      <h2>Cierre del Tutorial, Evaluación y Fuentes</h2>
+    </div>
+
+    <div class="card">
+      <h3>5.1. Resumen General de lo Aprendido</h3>
+      <p>A lo largo de este tutorial hemos cubierto la transformación del aprendizaje mediante <strong>Gemini Live</strong>:</p>
+      <ol>
+        <li><strong>Acceso e interfaz:</strong> Configuración gratuita en Google AI Studio utilizando modelos de respuesta en tiempo real como Gemini 3.8 Live.</li>
+        <li><strong>Control por voz e imagen:</strong> Uso de la voz como canal principal y captación de pantalla activa (<em>Share Screen</em>).</li>
+        <li><strong>Aplicaciones transversales:</strong> Aprendizaje de idiomas con corrección de pronunciación, interpretación técnica de motores, resolución de matemáticas, gestión de software y agentes en Codex, traducción de latín medieval y análisis financiero en tiempo real.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>5.2. Lista de Conceptos Clave</h3>
+      <ul>
+        <li><strong>Gemini 3.8 Live:</strong> Modelo de IA conversacional multimodal de Google optimizado para voz interactiva con latencia mínima.</li>
+        <li><strong>Share Screen:</strong> Función que permite a la IA observar la pantalla del usuario en directo.</li>
+        <li><strong>System Instruction:</strong> Bloque de instrucciones previas que define el tono, idioma y comportamiento del modelo.</li>
+        <li><strong>Modelo de Comparación Multiplicativa:</strong> Estructura matemática que escala una cantidad de referencia por un factor relacional.</li>
+        <li><strong>Compresor (Aviación):</strong> Componente que incrementa la presión y temperatura del aire antes de la combustión (explicado como un embudo gigante).</li>
+        <li><strong>Protólogo:</strong> Texto de introducción o prefacio a una obra más extensa.</li>
+        <li><strong>Trust Folder:</strong> Permiso otorgado a aplicaciones de desarrollo para gestionar archivos dentro de un directorio seleccionado.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>5.3. Los 5 Errores que NUNCA Debes Cometer</h3>
+      <ol>
+        <li><strong>Nunca escribas cuando puedas hablar:</strong> Rompe la fluidez de Gemini Live.</li>
+        <li><strong>Nunca te quedes con la primera explicación técnica si no la has entendido:</strong> Pide siempre una analogía coloquial.</li>
+        <li><strong>Nunca dejes de revisar qué pantalla estás compartiendo:</strong> Asegúrate de que la IA está viendo la ventana activa correcta.</li>
+        <li><strong>Nunca malgastes tokens en modelos sobredimensionados para tareas sencillas:</strong> Pide consejo a la IA sobre qué modelo seleccionar.</li>
+        <li><strong>Nunca olvides verificar datos financieros antes de tomar decisiones reales de inversión:</strong> Gemini analiza los datos de la web en el momento, pero debes revisar siempre las cifras.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>5.4. Recomendaciones para Seguir Aprendiendo</h3>
+      <ul>
+        <li>Únete a comunidades activas de Inteligencia Artificial como el canal de Telegram mencionado en las fuentes para recibir novedades semanales y boletines (<em>newsletters</em>).</li>
+        <li>Experimenta aplicando Gemini Live a tus pasatiempos o tareas laborales diarias (revisión de correos, lectura de manuales, resumen de contratos).</li>
+        <li>Compara el desempeño de los modelos de voz de Google con otras alternativas del mercado (como el modo de voz avanzado de OpenAI en ChatGPT) para identificar cuál se adapta mejor a tu flujo de trabajo.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>5.5. Ejercicios Prácticos con Soluciones Explicadas</h3>
+
+      <div class="acc">
+        <div class="acc-head">Ejercicio 1: Práctica de Idiomas</div>
+        <div class="acc-body">
+          <p><strong>Tarea:</strong> Configura una sesión para aprender 3 frases de saludo e interacción en un hotel en alemán o francés.</p>
+          <p><strong>Solución explicada:</strong></p>
+          <ol>
+            <li>Inicia Gemini 3.8 Live.</li>
+            <li>Di: <em>"Quiero aprender 3 frases básicas para hacer el check-in en un hotel en alemán. Dime la primera y corrígeme la pronunciación."</em></li>
+            <li>Repite la frase. Si Gemini detecta un fallo, vuelve a intentarlo hasta que te dé el visto bueno.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="acc">
+        <div class="acc-head">Ejercicio 2: Explicación de un Gráfico o Diagrama</div>
+        <div class="acc-body">
+          <p><strong>Tarea:</strong> Abre cualquier gráfico estadístico en tu pantalla y pide a Gemini que te identifique el dato más relevante.</p>
+          <p><strong>Solución explicada:</strong></p>
+          <ol>
+            <li>Activa <em>Share Screen</em>.</li>
+            <li>Muestra la imagen y pregunta: <em>"¿Cuál es la tendencia principal que se observa en esta gráfica y qué dato destaca más?"</em></li>
+            <li>Gemini analizará la imagen en directo y te dará el resumen por voz.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>5.6. Glosario de Términos Técnicos</h3>
+      <ul>
+        <li><strong>Agente Conversacional:</strong> Sistema de IA capaz de mantener un diálogo fluido en lenguaje natural simulando la interacción humana.</li>
+        <li><strong>Latencia:</strong> El tiempo de retraso entre la emisión de una instrucción por voz y la respuesta generada por el sistema.</li>
+        <li><strong>Multimodalidad:</strong> Capacidad de un sistema de IA de procesar y combinar distintos tipos de entrada simultáneamente (texto, audio, imagen, vídeo).</li>
+        <li><strong>Tokens:</strong> Unidades mínimas de información (palabras o fragmentos de texto) que las IAs procesan para calcular el consumo y costo de una operación.</li>
+      </ul>
+    </div>
+
+    <div class="summary">
+      <h4>📝 Cierre</h4>
+      <ul>
+        <li>Domina la configuración inicial en Google AI Studio.</li>
+        <li>Convierte Gemini Live en tu tutor personal y superasistente.</li>
+        <li>Aplica voz y pantalla compartida para aprender y producir más rápido.</li>
+        <li>Consulta las Fuentes y los Créditos para profundizar y contactar.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= EJERCICIOS ======================= -->
+<section id="ejercicios" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Aprende Haciendo</span>
+      <h2>Ejercicios Prácticos de Gemini Live</h2>
+    </div>
+
+    <div class="card">
+      <h3>🎯 Cómo aprovechar esta sección</h3>
+      <p>Esta sección reúne <strong>15 ejercicios prácticos</strong> distribuidos en cuatro bloques que siguen la progresión del tutorial. Cada ejercicio incluye el enunciado, la solución paso a paso, la explicación causal (el «por qué») y el error típico a evitar con su prevención.</p>
+      <div class="metrics">
+        <div class="metric"><span class="num">15</span><span class="lbl">Ejercicios</span></div>
+        <div class="metric"><span class="num">4</span><span class="lbl">Bloques</span></div>
+        <div class="metric"><span class="num">3</span><span class="lbl">Niveles</span></div>
+        <div class="metric"><span class="num">15</span><span class="lbl">Soluciones</span></div>
+      </div>
+      <div class="callout info">
+        <strong>CÓMO PRACTICAR</strong>
+        Intenta resolver cada ejercicio por tu cuenta antes de desplegar la solución. Pulsa sobre el título para abrir la tarjeta y consultar los pasos, la explicación causal y el error típico. Los niveles (<span class="badge green">Baja</span> · <span class="badge amber">Media</span> · <span class="badge red">Alta</span>) indican la dificultad orientativa.
+      </div>
+    </div>
+
+    <!-- BLOQUE 1 -->
+    <div class="section-header">
+      <span class="tag">Bloque 1</span>
+      <h2>Fundamentos: Entender Gemini Live</h2>
+    </div>
+
+    <!-- Ejercicio 1 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟢 Ejercicio 01 · Definir Gemini Live con tus propias palabras <span class="badge green">Baja</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Completar definición con reformulación</p>
+        <h4>📋 Enunciado</h4>
+        <p>Define con tus propias palabras qué es Gemini Live y en qué se diferencia de un chat de texto tradicional, según el Capítulo 1.1. Después indica los dos canales de entrada que utiliza simultáneamente.</p>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li>Gemini Live es un modelo conversacional de voz en tiempo real, con latencia mínima, desarrollado por Google.</li>
+          <li>Frente al chat tradicional (entrada por teclado y lectura manual), Gemini Live interpreta la voz del usuario y observa la pantalla compartida.</li>
+          <li>Los dos canales de entrada son: la voz hablada y la captación visual de la pantalla (Share Screen).</li>
+          <li>El resultado es una respuesta hablada inmediata, sin teclear y con capacidad de adaptación del nivel de explicación.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          La diferencia esencial no es «voz vs. texto», sino la combinación de dos canales simultáneos (audio + imagen) que permite a la IA tener contexto visual de lo que el usuario está viendo, algo imposible en un chat tradicional.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Definir Gemini Live como «un ChatGPT con voz». Prevención: recordar que la multimodalidad (voz + pantalla) es lo que lo distingue, no sólo el canal de audio.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 2 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟢 Ejercicio 02 · Detectar la ventaja única de Gemini Live <span class="badge green">Baja</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Escenario de decisión con múltiples opciones</p>
+        <h4>📋 Enunciado</h4>
+        <p>Tienes cuatro tareas pendientes. ¿En cuál de ellas Gemini Live aporta una ventaja específica que un chat de texto no puede igualar?</p>
+        <ul>
+          <li><strong>A.</strong> Redactar un correo largo desde cero.</li>
+          <li><strong>B.</strong> Practicar la pronunciación en inglés y recibir corrección inmediata.</li>
+          <li><strong>C.</strong> Buscar una definición en un diccionario online.</li>
+          <li><strong>D.</strong> Copiar una tabla de una web a un documento.</li>
+        </ul>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li>Descartar A: la redacción puede hacerse en cualquier chat.</li>
+          <li>Descartar C: la búsqueda de definiciones es una tarea de texto estándar.</li>
+          <li>Descartar D: copiar y pegar no requiere IA conversacional.</li>
+          <li><strong>Confirmar B</strong>: la corrección de pronunciación en tiempo real es una capacidad específica de Gemini Live (Cap. 1.3), porque combina audio de entrada y respuesta hablada inmediata.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          La pronunciación sólo puede corregirse escuchando al usuario hablar. Un chat de texto no recibe audio, por lo que no puede detectar errores fonéticos.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Elegir A porque «también usa IA». Prevención: preguntarse si la tarea requiere entrada de voz o visión de pantalla.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 3 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟢 Ejercicio 03 · Clasificar usos típicos y no mencionados <span class="badge green">Baja</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Clasificar conceptos</p>
+        <h4>📋 Enunciado</h4>
+        <p>Clasifica cada situación como «uso típico de Gemini Live (Cap. 1.3)» o «uso no mencionado en el tutorial». Justifica brevemente.</p>
+        <ul>
+          <li><strong>A.</strong> Analizar el esquema del motor de un avión.</li>
+          <li><strong>B.</strong> Traducir un manuscrito medieval en latín.</li>
+          <li><strong>C.</strong> Reservar un vuelo pagando con tarjeta.</li>
+          <li><strong>D.</strong> Practicar conversación en inglés.</li>
+          <li><strong>E.</strong> Analizar el Ibex 35 y generar un informe ejecutivo.</li>
+        </ul>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li>A → <strong>uso típico</strong> (Cap. 1.3, comprensión de diagramas técnicos).</li>
+          <li>B → <strong>uso típico</strong> (Cap. 1.3, traducción de documentos históricos).</li>
+          <li>C → <strong>no mencionado</strong>: el tutorial no describe transacciones reales ni pagos.</li>
+          <li>D → <strong>uso típico</strong> (Cap. 1.3, aprendizaje de idiomas).</li>
+          <li>E → <strong>uso típico</strong> (Cap. 1.3, análisis financiero y de mercado).</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          El tutorial se limita a tareas de comprensión, asistencia técnica y análisis de información. Las transacciones con consecuencias reales quedan fuera de su alcance descrito.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Asumir que cualquier tarea digital entra en el catálogo. Prevención: ceñirse a la lista explícita del 1.3.
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOQUE 2 -->
+    <div class="section-header">
+      <span class="tag">Bloque 2</span>
+      <h2>Configuración inicial de la sesión</h2>
+    </div>
+
+    <!-- Ejercicio 4 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟡 Ejercicio 04 · Ordenar los pasos de configuración inicial <span class="badge amber">Media</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Ordenar secuencia de pasos</p>
+        <h4>📋 Enunciado</h4>
+        <p>Ordena correctamente los siguientes pasos de configuración en Google AI Studio, según el Capítulo 2:</p>
+        <ul>
+          <li>Activar Share Screen y seleccionar «Toda la pantalla».</li>
+          <li>Acceder a la plataforma Google AI Studio.</li>
+          <li>Configurar la System Instruction en español sin preguntas de cierre.</li>
+          <li>Ajustar el selector de voz y verificar micrófono y altavoces.</li>
+          <li>Seleccionar el modelo Gemini 3.8 Live.</li>
+        </ul>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li>Acceder a Google AI Studio (paso 1).</li>
+          <li>Seleccionar Gemini 3.8 Live en el panel superior derecho (paso 2).</li>
+          <li>Configurar la System Instruction (paso 3).</li>
+          <li>Ajustar voz, micrófono y altavoces (paso 4).</li>
+          <li>Activar Share Screen y elegir «Toda la pantalla» (paso 5).</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          El orden no es arbitrario: la System Instruction debe fijarse antes de empezar a hablar para que la IA no introduzca preguntas de cierre desde la primera respuesta. Y Share Screen va al final porque implica que la ventana ya está abierta y preparada.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Configurar la System Instruction después de haber empezado a conversar. Prevención: tratarla como paso previo obligatorio, no como ajuste posterior.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 5 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟡 Ejercicio 05 · Detectar los defectos de un prompt de sistema <span class="badge amber">Media</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Detective de prompts</p>
+        <h4>📋 Enunciado</h4>
+        <p>Este prompt está destinado a la System Instruction, pero tiene tres defectos. Encuéntralos y reescríbelo.</p>
+        <div class="prompt">"Hola, quiero que me respondas en español, y si quieres al final me puedes preguntar si necesito algo más. Gracias."</div>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Defecto 1 — Idioma ambiguo:</strong> «en español» no especifica la variante. El tutorial pide expresamente «español de España».</li>
+          <li><strong>Defecto 2 — Cierre no deseado:</strong> la frase «si quieres al final me puedes preguntar si necesito algo más» reintroduce justo lo que la System Instruction debe eliminar.</li>
+          <li><strong>Defecto 3 — Tono dubitativo:</strong> «si quieres» deja la decisión a la IA, en lugar de fijar una norma.</li>
+          <li><strong>Reescritura:</strong> «Quiero que todas tus respuestas me las des en español de España. Cuando termines cualquier respuesta, no añadas preguntas del tipo ¿quieres que haga esto? ¿necesitas algo más? Quiero una conversación normal.»</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          Una System Instruction es un contrato de comportamiento, no una sugerencia. Si se formula con condicionales o ambigüedades, la IA puede ignorarla en cualquier momento de la sesión.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Mantener el «gracias» y el tono coloquial creyendo que «suaviza» la instrucción. Prevención: en System Instructions, claridad y firmeza por encima de cortesía.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 6 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟡 Ejercicio 06 · Elegir la opción correcta de Share Screen <span class="badge amber">Media</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Escenario de decisión con múltiples opciones</p>
+        <h4>📋 Enunciado</h4>
+        <p>Vas a analizar un diagrama que tienes en una pestaña de Chrome, mientras consultas otra ventana con documentación y tomas notas en un editor. ¿Qué opción de Share Screen eliges y por qué?</p>
+        <ul>
+          <li><strong>A.</strong> Pestaña de Chrome.</li>
+          <li><strong>B.</strong> Ventana.</li>
+          <li><strong>C.</strong> Toda la pantalla.</li>
+          <li><strong>D.</strong> No compartir pantalla.</li>
+        </ul>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li>Descartar A: limitaría la visión de la IA a una sola pestaña.</li>
+          <li>Descartar B: limitaría la visión a una sola ventana.</li>
+          <li>Descartar D: sin pantalla compartida, Gemini no puede analizar el diagrama.</li>
+          <li><strong>Confirmar C</strong>: el tutorial recomienda «Toda la pantalla» precisamente cuando se va a navegar entre distintas aplicaciones o pestañas durante la sesión.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          La opción elegida debe coincidir con el flujo real de trabajo. Si vas a cambiar de aplicación mientras hablas, compartir sólo una pestaña obliga a reconfigurar Share Screen varias veces por sesión, rompiendo la fluidez.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Elegir «Pestaña de Chrome» por parecer más seguro o privado. Prevención: pensar primero en el recorrido de la sesión, no en el aislamiento.
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOQUE 3 -->
+    <div class="section-header">
+      <span class="tag">Bloque 3</span>
+      <h2>Aplicación práctica en casos reales</h2>
+    </div>
+
+    <!-- Ejercicio 7 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟢 Ejercicio 07 · Solicitar una analogía para un concepto técnico <span class="badge green">Baja</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Solicitud de analogía</p>
+        <h4>📋 Enunciado</h4>
+        <p>Gemini te ha explicado el compresor de un motor de aviación con terminología técnica. Diseña el prompt que le pedirías a continuación para obtener una explicación alternativa y comprensible, y describe la analogía que el tutorial utiliza como referencia.</p>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Prompt:</strong> «¿Me lo podrías explicar de otra manera?».</li>
+          <li><strong>La analogía del tutorial:</strong> el compresor funciona como un embudo gigante que fuerza mucho aire a pasar por un espacio reducido.</li>
+          <li><strong>Efecto descrito:</strong> ese paso forzado eleva drásticamente la presión y la temperatura del aire antes de la combustión.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          La explicación técnica («aumenta la presión y la temperatura del aire») es correcta pero abstracta. La analogía traduce esa función a una imagen cotidiana que el cerebro puede visualizar sin necesidad de vocabulario de ingeniería.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Pedir «explícalo más fácil» sin concretar el tipo de simplificación. Prevención: pedir explícitamente una analogía cotidiana.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 8 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟡 Ejercicio 08 · Pedir doble explicación: coloquial y técnica <span class="badge amber">Media</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Doble explicación (coloquial + técnica)</p>
+        <h4>📋 Enunciado</h4>
+        <p>Tienes un modelo comparativo donde Vito tiene 12 y Gai tiene 36. Redacta dos prompts consecutivos: uno para obtener la lectura coloquial y otro para obtener la lectura técnica, y resume qué diría Gemini en cada caso.</p>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Primer prompt (modo coloquial):</strong> «Explícame este modelo en lenguaje normal, sin tecnicismos, que no me entero con palabras raras.»
+            <br>→ Respuesta esperada: la cantidad de Vito (12) equivale a una tercera parte de la de Gai (36).</li>
+          <li><strong>Segundo prompt (modo técnico):</strong> «Ahora explícamelo con lenguaje un poco más técnico, para presentarlo de forma académica.»
+            <br>→ Respuesta esperada: es un modelo de comparación multiplicativa, donde la cantidad de referencia se escala por un factor relacional.</li>
+          <li><strong>Contraste:</strong> el primer prompt da la relación numérica; el segundo le pone nombre formal al patrón.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          Este patrón de doble consulta es uno de los consejos del Cap. 4.2: primero entender el concepto, después adquirir el vocabulario profesional. Pedir sólo la versión técnica bloquea la comprensión; pedir sólo la coloquial impide reutilizar el aprendizaje en contextos formales.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Hacer un único prompt «explícamelo bien». Prevención: separar siempre las dos solicitudes, porque son dos objetivos distintos.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 9 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟡 Ejercicio 09 · Análisis guiado del Ibex 35 por voz <span class="badge amber">Media</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Escenario práctico con navegación guiada</p>
+        <h4>📋 Enunciado</h4>
+        <p>Tu jefe te pide un análisis del Ibex 35 del día. Estás en la web financiera pero no sabes navegar. Detalla: (1) qué prompt dices a Gemini; (2) qué pasos de navegación te indicará; (3) qué datos concretos te dará sobre el índice y dos valores destacados; (4) cómo generar el informe final.</p>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Prompt:</strong> «Mi jefe me ha encargado un análisis de la bolsa de hoy y no sé por dónde empezar. ¿Qué hago para ver cómo está el índice?».</li>
+          <li><strong>Navegación:</strong> hacer clic en «Mercados y cotizaciones» y después sobre «Ibex 35».</li>
+          <li><strong>Datos esperados (según el tutorial):</strong> el índice sube un <span class="badge green">0,65%</span>; <strong>CaixaBank</strong> destaca al alza (<span class="badge green">+2,33%</span>) y <strong>Acciona</strong> también sube (<span class="badge green">+1,90%</span>); <strong>Repsol</strong> lidera las caídas (<span class="badge red">-2,12%</span>).</li>
+          <li><strong>Informe:</strong> «Hazme un resumen de esto para entregárselo a mi jefe, que pueda copiar y pegar».</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          Este caso combina navegación guiada por voz con análisis de pantalla. Gemini no sólo lee cifras: transforma la lectura en un entregable reutilizable, algo que un simple buscador no ofrece.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Saltarse la fase de navegación y pedir directamente el informe. Prevención: guiar la sesión paso a paso para que Gemini vea cada pantalla.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 10 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🔴 Ejercicio 10 · Extraer el patrón común de los casos prácticos <span class="badge red">Alta</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Pregunta de síntesis</p>
+        <h4>📋 Enunciado</h4>
+        <p>De los seis casos prácticos del Capítulo 3, selecciona tres y explica qué patrón común comparten: cómo se combinan voz, pantalla compartida y doble nivel de explicación.</p>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Caso elegido A — Motor de aviación:</strong> voz para preguntar, pantalla para mostrar el esquema, doble explicación (técnica + analogía).</li>
+          <li><strong>Caso elegido B — Problema matemático:</strong> voz para plantear, pantalla para mostrar la ecuación, doble explicación (coloquial + técnica).</li>
+          <li><strong>Caso elegido C — Manuscrito medieval:</strong> voz para pedir la traducción, pantalla para mostrar el texto, doble salida (traducción + resumen llano).</li>
+          <li><strong>Patrón común:</strong> (a) el usuario plantea el problema por voz; (b) Share Screen aporta el contexto visual; (c) la IA ofrece dos registros de respuesta y el usuario elige el que necesita.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          Los seis casos no son anécdotas aisladas: son variaciones del mismo flujo multimodal (voz + pantalla + doble registro). Identificarlo permite al usuario trasladar el patrón a cualquier área nueva.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Elegir los casos más llamativos y describirlos sin extraer el patrón. Prevención: buscar primero qué se repite en todos antes de describir cada uno.
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOQUE 4 -->
+    <div class="section-header">
+      <span class="tag">Bloque 4</span>
+      <h2>Prompts avanzados, buenas prácticas y cierre</h2>
+    </div>
+
+    <!-- Ejercicio 11 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟢 Ejercicio 11 · Reescribir un prompt deficiente <span class="badge green">Baja</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Reescribir un prompt deficiente</p>
+        <h4>📋 Enunciado</h4>
+        <p>Un compañero te pasa esta instrucción para Gemini Live y te pide que la reescribas aplicando los consejos del Capítulo 4.2:</p>
+        <div class="prompt">"Oye, ayúdame con la bolsa que no entiendo nada, dime lo que sea útil y si quieres luego hablamos. ¿Necesitas algo más? Gracias."</div>
+        <p>Reescribe el prompt corrigiendo todos los defectos y justifica cada cambio.</p>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Detectar el cierre:</strong> la pregunta «¿Necesitas algo más?» contradice la System Instruction del 4.1.</li>
+          <li><strong>Detectar la vaguedad:</strong> «dime lo que sea útil» no define objetivo, pantalla ni contexto.</li>
+          <li><strong>Detectar la falta de referencia visual:</strong> no se menciona Share Screen (4.2, consejo 1).</li>
+          <li><strong>Detectar la ausencia de doble explicación</strong> (4.2, consejo 2) y de corrección activa (4.2, consejo 3).</li>
+          <li><strong>Reescribir:</strong> «Tengo abierto en pantalla el portal financiero y voy a compartir toda la pantalla. Necesito que veas la tabla del Ibex 35 y me digas primero, en lenguaje llano, cómo está el índice hoy; después dame la misma lectura en versión técnica. Si me equivoco al interpretar alguna cifra, corrígeme.»</li>
+          <li><strong>Verificar:</strong> elimina cierres, define objetivo, activa Share Screen, pide doble explicación y corrección activa.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          Los prompts deficientes fallan por acumulación de omisiones, no por un solo error. La System Instruction sólo funciona si el propio prompt no reintroduce preguntas de cierre; y la potencia de Gemini Live depende de que la IA vea la pantalla, algo que un prompt genérico nunca activa.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Reescribir sólo arreglando la gramática sin eliminar la pregunta final ni añadir Share Screen. Prevención: marcar primero los cuatro consejos del 4.2 y comprobar que al menos tres aparecen en la nueva versión.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 12 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟡 Ejercicio 12 · Distinguir errores frecuentes de errores críticos <span class="badge amber">Media</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Clasificar errores (frecuentes vs. nunca cometer)</p>
+        <h4>📋 Enunciado</h4>
+        <p>Clasifica cada situación como «Error frecuente (Cap. 4.3)» o «Error que NUNCA debes cometer (Cap. 5.3)». Algunas pertenecen a ambos planos: en ese caso indícalo y explica por qué aparecen en los dos listados.</p>
+        <ul>
+          <li><strong>A.</strong> Escribir por teclado mientras se mantiene una sesión de voz.</li>
+          <li><strong>B.</strong> Aceptar una explicación técnica del compresor sin pedir analogía.</li>
+          <li><strong>C.</strong> Compartir la pestaña equivocada mientras se consulta otra ventana.</li>
+          <li><strong>D.</strong> Invertir dinero real basándose sólo en el análisis de la web sin revisar cifras.</li>
+          <li><strong>E.</strong> Usar un modelo sobredimensionado para una tarea simple.</li>
+          <li><strong>F.</strong> No haber configurado la System Instruction al inicio.</li>
+        </ul>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>A</strong> → Error frecuente (4.3, error 1) y error «nunca» (5.3). <em>Doble pertenencia.</em></li>
+          <li><strong>B</strong> → Error frecuente (4.3, error 4) y error «nunca» (5.3). <em>Doble pertenencia.</em></li>
+          <li><strong>C</strong> → Error frecuente (4.3, error 3) y error «nunca» (5.3). <em>Doble pertenencia.</em></li>
+          <li><strong>D</strong> → Exclusivo del 5.3 (verificar datos financieros antes de invertir).</li>
+          <li><strong>E</strong> → Exclusivo del 5.3 (malgastar tokens en modelos sobredimensionados).</li>
+          <li><strong>F</strong> → Exclusivo del 4.3 (error 2, no configurar System Instructions).</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          El Cap. 4.3 recoge fallos operativos de la sesión; el Cap. 5.3 los eleva a principios de uso responsable. Por eso tres errores se solapan: son operativos y a la vez principios. Los dos exclusivos del 5.3 (finanzas, tokens) implican consecuencias externas (dinero, coste), no sólo pérdida de fluidez.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Clasificar D como error frecuente porque «suena parecido» a algo visto antes. Prevención: localizar cada situación en la tabla del 4.3 y en la lista del 5.3 antes de decidir.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 13 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟢 Ejercicio 13 · Reformular el glosario con tus propias palabras <span class="badge green">Baja</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Completar glosario con definición breve (reformulada)</p>
+        <h4>📋 Enunciado</h4>
+        <p>Completa el glosario con una definición breve y reformulada (sin copiar literalmente el tutorial) para cada término. Respeta la nomenclatura exacta.</p>
+        <p><strong>Términos:</strong></p>
+        <ol>
+          <li>Modelo de comparación multiplicativa</li>
+          <li>Protólogo</li>
+          <li>Trust Folder</li>
+          <li>Multimodalidad</li>
+          <li>Latencia</li>
+          <li>Tokens</li>
+        </ol>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Modelo de comparación multiplicativa</strong> → manera de poner en relación dos cantidades en la que una sirve de base y la otra se obtiene aplicándole un factor.</li>
+          <li><strong>Protólogo</strong> → escrito preliminar que abre una obra mayor y anticipa sus intenciones.</li>
+          <li><strong>Trust Folder</strong> → autorización que se da a un programa para que trabaje con los archivos de una carpeta concreta.</li>
+          <li><strong>Multimodalidad</strong> → capacidad de manejar a la vez varias clases de información: texto, audio, imagen y vídeo.</li>
+          <li><strong>Latencia</strong> → tiempo que transcurre entre la orden que se da y la respuesta que se recibe.</li>
+          <li><strong>Tokens</strong> → piezas mínimas de texto (palabras o trozos) con las que se mide lo que consume una operación.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          El glosario no es decorativo: cada término justifica una decisión técnica del tutorial. La latencia explica por qué se elige Gemini 3.8 Live para conversación; la multimodalidad explica por qué funciona Share Screen; los tokens justifican elegir el modelo adecuado en Codex.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Reproducir la definición del tutorial palabra por palabra. Prevención: redactar la definición primero con palabras propias, sin mirar el texto fuente.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 14 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🟡 Ejercicio 14 · Tomar decisiones en la configuración de Codex <span class="badge amber">Media</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Escenario de decisión con múltiples opciones</p>
+        <h4>📋 Enunciado</h4>
+        <p>Estás configurando tu primer proyecto en Codex con Gemini Live compartiendo pantalla. Aparece el mensaje «Trust Folder» y, abajo a la izquierda, un desplegable de modelos. Debes decidir tres cosas: (a) qué hacer con el mensaje; (b) qué modelo elegir para un uso normal sin disparar el consumo; (c) qué hacer si Gemini empieza a añadir preguntas del tipo «¿quieres que haga algo más?» al final de cada respuesta.</p>
+        <ul>
+          <li><strong>A.</strong> Pulsar «Trust Folder» sin más, elegir el modelo más potente y aceptar las preguntas de cierre.</li>
+          <li><strong>B.</strong> Preguntar a Gemini qué significa «Trust Folder», elegir GPT-6 Luna Medio y revisar si la System Instruction está configurada.</li>
+          <li><strong>C.</strong> Ignorar «Trust Folder», elegir cualquier modelo y responder siempre «no» a las preguntas.</li>
+          <li><strong>D.</strong> Preguntar por «Trust Folder», elegir el modelo más económico del desplegable y desactivar el cierre desde el menú de preferencias.</li>
+          <li><strong>E.</strong> Preguntar por «Trust Folder», elegir el modelo más potente y esperar a que Gemini deje de hacer preguntas por sí solo.</li>
+        </ul>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Descartar A:</strong> aceptar sin entender el permiso y elegir el modelo más potente ignora los consejos 4.2 y los límites del 5.3.</li>
+          <li><strong>Descartar C:</strong> «cualquier modelo» contradice el consejo 4.2.4.</li>
+          <li><strong>Descartar D:</strong> presupone que existe un menú de preferencias para desactivar el cierre, algo que el tutorial no menciona; el problema se resuelve en la System Instruction.</li>
+          <li><strong>Descartar E:</strong> elegir el modelo más potente para una tarea simple malgasta tokens (5.3), y las preguntas no desaparecen solas.</li>
+          <li><strong>Confirmar B:</strong> (a) consultar el significado del permiso por voz; (b) elegir GPT-6 Luna Medio por equilibrio rendimiento/consumo; (c) revisar la System Instruction porque las preguntas de cierre indican que no está aplicada (4.3, error 2).</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          El escenario encadena tres decisiones que dependen de tres apartados distintos: significado del permiso (5.2), elección de modelo (4.2) y corrección de un error frecuente (4.3). Resolver sólo una de las tres deja la sesión a medias.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Elegir el modelo más potente «por seguridad». Prevención: recordar que en Codex el consumo se mide en tokens y el tutorial pide equilibrar calidad y gasto.
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 15 -->
+    <div class="acc exercise">
+      <div class="acc-head"><span class="head-title">🔴 Ejercicio 15 · Diseñar una sesión completa de traducción <span class="badge red">Alta</span></span></div>
+      <div class="acc-body">
+        <p><strong>Tipo:</strong> Pregunta de síntesis que conecta dos capítulos</p>
+        <h4>📋 Enunciado</h4>
+        <p>Vas a preparar una sesión completa para traducir un manuscrito medieval en latín. Diseña el plan detallando: (1) la instrucción inicial de configuración; (2) el prompt de apertura sobre el manuscrito; (3) el prompt de reformulación; (4) el prompt de cierre para obtener un texto reutilizable; (5) dos decisiones concretas tomadas en la fase de configuración que provengan del Capítulo 5 (no del Capítulo 4).</p>
+
+        <h4>✅ Solución paso a paso</h4>
+        <ol>
+          <li><strong>Instrucción inicial (Cap. 4.1):</strong> fijar la System Instruction en español de España y sin preguntas de cierre.</li>
+          <li><strong>Prompt de apertura:</strong> solicitar la traducción del primer párrafo identificando que está en latín medieval, con la pantalla compartida mostrando el manuscrito.</li>
+          <li><strong>Prompt de reformulación (Cap. 4.1 + 4.2):</strong> pedir un resumen con lenguaje llano, aplicando el consejo de doble explicación (técnica + coloquial).</li>
+          <li><strong>Prompt de cierre:</strong> pedir el resumen del conjunto en formato copiable, evitando cualquier pregunta conversacional final.</li>
+          <li><strong>Decisiones del Cap. 5:</strong>
+            <ul>
+              <li>Verificar antes de empezar que Share Screen está activo y que la ventana mostrada es la correcta (5.3: no dejar de revisar qué pantalla se comparte).</li>
+              <li>Elegir Gemini 3.8 Live y no Extended Thinking, porque la tarea es de comprensión y traducción asistida por voz, y la variedad Live ofrece la respuesta inmediata que requiere la conversación (5.2).</li>
+            </ul>
+          </li>
+        </ol>
+
+        <div class="callout info">
+          <strong>POR QUÉ (Explicación causal)</strong>
+          El Cap. 4 aporta la mecánica de la conversación (qué decir y en qué orden); el Cap. 5 aporta las decisiones previas y los límites. Sin las decisiones del Cap. 5, los prompts correctos del Cap. 4 pueden ejecutarse sobre una pantalla equivocada o con un modelo inadecuado.
+        </div>
+
+        <div class="callout error">
+          <strong>ERROR TÍPICO A EVITAR</strong>
+          Diseñar sólo la secuencia de prompts y dar por hecho que compartir pantalla «ya se hará». Prevención: tratar las decisiones del Cap. 5 como pasos verificables, no como condiciones implícitas.
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA RESUMEN FINAL -->
+    <div class="card">
+      <h3>📊 Tabla resumen de los 15 ejercicios</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>N.º</th><th>Tipo</th><th>Dificultad</th><th>Apartado del tutorial</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Completar definición</td><td><span class="badge green">Baja</span></td><td>Fundamentos (1.1)</td></tr>
+            <tr><td>2</td><td>Escenario de decisión</td><td><span class="badge green">Baja</span></td><td>Fundamentos (1.3)</td></tr>
+            <tr><td>3</td><td>Clasificar conceptos</td><td><span class="badge green">Baja</span></td><td>Fundamentos (1.3)</td></tr>
+            <tr><td>4</td><td>Ordenar secuencia</td><td><span class="badge amber">Media</span></td><td>Configuración (pasos 1–5)</td></tr>
+            <tr><td>5</td><td>Detective de prompts</td><td><span class="badge amber">Media</span></td><td>Configuración (paso 3) + Prompts (4.1)</td></tr>
+            <tr><td>6</td><td>Escenario de decisión</td><td><span class="badge amber">Media</span></td><td>Configuración (paso 5)</td></tr>
+            <tr><td>7</td><td>Solicitud de analogía</td><td><span class="badge green">Baja</span></td><td>Casos prácticos (3.2)</td></tr>
+            <tr><td>8</td><td>Doble explicación</td><td><span class="badge amber">Media</span></td><td>Casos prácticos (3.3) + Prompts (4.2)</td></tr>
+            <tr><td>9</td><td>Escenario práctico</td><td><span class="badge amber">Media</span></td><td>Casos prácticos (3.6)</td></tr>
+            <tr><td>10</td><td>Síntesis de casos</td><td><span class="badge red">Alta</span></td><td>Casos prácticos (3.1–3.6)</td></tr>
+            <tr><td>11</td><td>Reescribir prompt</td><td><span class="badge green">Baja</span></td><td>Prompts (4.1 + 4.2)</td></tr>
+            <tr><td>12</td><td>Clasificar errores</td><td><span class="badge amber">Media</span></td><td>Prompts (4.3) + Cierre (5.3)</td></tr>
+            <tr><td>13</td><td>Completar glosario</td><td><span class="badge green">Baja</span></td><td>Cierre (5.2 + 5.6)</td></tr>
+            <tr><td>14</td><td>Escenario de decisión</td><td><span class="badge amber">Media</span></td><td>Prompts (4.2 + 4.3) + Cierre (5.3)</td></tr>
+            <tr><td>15</td><td>Síntesis entre capítulos</td><td><span class="badge red">Alta</span></td><td>Prompts (4.1, 4.2) + Cierre (5.2, 5.3)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="summary">
+      <h4>📝 Cómo seguir progresando</h4>
+      <ul>
+        <li>Empieza por los ejercicios de dificultad <span class="badge green">Baja</span> para afianzar los fundamentos.</li>
+        <li>Pasa después a los de dificultad <span class="badge amber">Media</span>, que combinan varios apartados del tutorial.</li>
+        <li>Reserva los ejercicios de dificultad <span class="badge red">Alta</span> para cuando domines la mecánica completa.</li>
+        <li>Repite cada ejercicio en voz alta con Gemini Live abierto para convertir la teoría en práctica real.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= FUENTES ======================= -->
+<section id="fuentes" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Recursos</span>
+      <h2>Fuentes y Recursos</h2>
+    </div>
+
+    <div class="callout info">
+      <strong>INFO</strong>
+      El contenido de este tutorial se encuentra fundamentado y respaldado en el análisis del vídeo oficial y la documentación de las fuentes consultadas.
+    </div>
+
+    <div class="card">
+      <h3>🎥 Fuente Principal — Vídeo de YouTube</h3>
+      <ul>
+        <li><strong>Nombre del Vídeo de YouTube:</strong> <code>Google lanza tu nuevo PROFESOR con IA GRATIS (Gemini Live)</code></li>
+        <li><strong>Canal de Origen:</strong> NextGen IA Hub</li>
+        <li><strong>Enlace URL del Vídeo:</strong> <a href="https://youtube.com/watch?v=Plsqi21cx1I&is=nuyCktw67BbIWy4q" target="_blank" rel="noopener">Ver Vídeo en YouTube</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>📚 Recursos Complementarios Recomendados</h3>
+      <ul>
+        <li>Comunidades activas de Inteligencia Artificial (canal de Telegram mencionado en el vídeo fuente).</li>
+        <li>Documentación oficial de Google AI Studio para acceso a los modelos Live.</li>
+        <li>Modelos alternativos de voz avanzada: modo de voz de OpenAI en ChatGPT.</li>
+        <li>Entornos de desarrollo con agentes: plataforma Codex, con modelos como GPT-6 Luna Medio.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>ℹ️ Nota sobre el contenido</h3>
+      <p>Todo el contenido de este tutorial procede del material original proporcionado por el autor del documento. No se ha añadido información externa no respaldada por dichas fuentes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CRÉDITOS ======================= -->
+<section id="creditos" class="page">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Créditos</span>
+      <h2>Sobre este Tutorial</h2>
+    </div>
+
+    <div id="hero-svg-wrap-credits" style="margin-bottom:26px">
+      <div id="svg-slot-credits"></div>
+    </div>
+
+    <div class="credits-box">
+      <h3>Gemini Live: El Profesor Virtual y Superasistente de Inteligencia Artificial</h3>
+      <div class="author">✍️ Rubén Sbarsky</div>
+      <div class="meta">📅 FECHA: 29/09/2026</div>
+      <div class="meta">🕐 Hora: 05:57:16</div>
+      <div class="edu">📚 Tutorial solo con fines Educativos y Divulgación</div>
+      <p class="latin" style="margin-top:22px;color:var(--purple);font-style:italic;font-weight:700">Fiat iustitia, ruat caelum.</p>
+    </div>
+
+    <div class="card" style="max-width:720px;margin:20px auto">
+      <h3>📖 Sobre el contenido</h3>
+      <p>Este tutorial recopila y estructura el contenido íntegro del documento original sobre <strong>Gemini Live</strong>. Todos los capítulos, ejemplos, prompts, tablas y advertencias han sido preservados y adaptados visualmente para facilitar su comprensión, sin alterar su significado pedagógico.</p>
+    </div>
+
+    <footer>
+      <p>📚 Tutorial solo con fines Educativos y Divulgación</p>
+      <p>👨‍💻 Créditos: Rubén Sbarsky</p>
+      <p>📅 FECHA: 29/09/2026 · Hora: 05:57:16</p>
+      <p class="latin">Fiat iustitia, ruat caelum.</p>
+    </footer>
+  </div>
+</section>
+
+</main>
+
+<button id="toTop" aria-label="Volver arriba">↑</button>
+
+<!-- ======================= SVG ANIMADO (definido una vez, reutilizado) ======================= -->
+<div id="svg-master" style="position:absolute;left:-9999px;top:-9999px;width:0;height:0;overflow:hidden" aria-hidden="true">
+<svg id="gemini-svg" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070b14">
+        <animate attributeName="stop-color" values="#070b14;#0a1226;#0f172a;#0a1226;#070b14" dur="9s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="55%" stop-color="#0a0e1a">
+        <animate attributeName="stop-color" values="#0a0e1a;#101b35;#152546;#101b35;#0a0e1a" dur="7s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#0f172a">
+        <animate attributeName="stop-color" values="#0f172a;#1e3a5f;#2a4a7f;#1e3a5f;#0f172a" dur="8s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <filter id="glowCyan" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowPurple" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowGreen" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e3a5f" stroke-width="0.6" opacity="0.5">
+        <animate attributeName="opacity" values="0.25;0.65;0.25" dur="6s" repeatCount="indefinite"/>
+      </path>
+    </pattern>
+
+    <radialGradient id="haloCyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloPurple" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloGreen" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloAmber" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.9">
+        <animate attributeName="stop-opacity" values="0.7;1;0.7" dur="2.5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="55%" stop-color="#a855f7" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00d4ff">
+        <animate attributeName="stop-color" values="#00d4ff;#a855f7;#22c55e;#f59e0b;#00d4ff" dur="8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#a855f7">
+        <animate attributeName="stop-color" values="#a855f7;#22c55e;#f59e0b;#00d4ff;#a855f7" dur="8s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <path id="flowA" d="M 120 330 Q 260 250 400 225 T 680 130" fill="none"/>
+    <path id="flowB" d="M 680 130 Q 520 200 400 225 T 120 330" fill="none"/>
+    <path id="voiceArc" d="M 130 100 Q 400 20 670 100" fill="none"/>
+    <path id="screenArc" d="M 130 370 Q 400 430 670 370" fill="none"/>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bgGrad)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+
+  <g transform="translate(400,225)">
+    <circle r="180" fill="none" stroke="#00d4ff" stroke-width="0.8" stroke-dasharray="3 8" opacity="0.4">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="24s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-dasharray" values="3 8;8 3;3 8" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="150" fill="none" stroke="#a855f7" stroke-width="0.9" stroke-dasharray="6 10" opacity="0.5">
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="18s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-dasharray" values="6 10;2 14;6 10" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="115" fill="none" stroke="#22c55e" stroke-width="0.7" stroke-dasharray="2 6" opacity="0.45">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="30s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="80" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="1 5" opacity="0.5">
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="14s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <circle cx="400" cy="225" r="70" fill="url(#haloCyan)">
+    <animate attributeName="r" values="60;90;60" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+  </circle>
+
+  <g transform="translate(400,225)">
+    <circle r="45" fill="url(#coreGrad)" filter="url(#softGlow)"/>
+    <circle r="30" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.9">
+      <animate attributeName="r" values="28;34;28" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="16" fill="#00d4ff" filter="url(#glowCyan)">
+      <animate attributeName="r" values="14;20;14" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+    <g>
+      <circle cx="0" cy="-52" r="4" fill="#22c55e" filter="url(#glowGreen)">
+        <animate attributeName="r" values="3;5;3" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="52" cy="0" r="4" fill="#a855f7" filter="url(#glowPurple)">
+        <animate attributeName="r" values="3;5;3" dur="2.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="52" r="4" fill="#f59e0b">
+        <animate attributeName="r" values="3;5;3" dur="3.1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-52" cy="0" r="4" fill="#ef4444">
+        <animate attributeName="r" values="3;5;3" dur="2.6s" repeatCount="indefinite"/>
+      </circle>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <g transform="translate(400,225)">
+    <circle r="62" fill="none" stroke="#00d4ff" stroke-width="1" stroke-dasharray="4 8" opacity="0.7">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="70" fill="none" stroke="#a855f7" stroke-width="0.8" stroke-dasharray="2 10" opacity="0.55">
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="7s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <path d="M 120 330 Q 260 250 400 225 T 680 130" fill="none" stroke="#00d4ff" stroke-width="1.6" stroke-dasharray="6 6" opacity="0.85" filter="url(#glowCyan)">
+    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 680 130 Q 520 200 400 225 T 120 330" fill="none" stroke="#a855f7" stroke-width="1.4" stroke-dasharray="5 7" opacity="0.7" filter="url(#glowPurple)">
+    <animate attributeName="stroke-dashoffset" from="0" to="24" dur="2.5s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 130 100 Q 400 20 670 100" fill="none" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="4 8" opacity="0.7">
+    <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 130 370 Q 400 430 670 370" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4 8" opacity="0.7">
+    <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3.5s" repeatCount="indefinite"/>
+  </path>
+
+  <circle r="3.2" fill="#00d4ff" filter="url(#glowCyan)">
+    <animateMotion dur="4s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#flowA"/>
+    </animateMotion>
+  </circle>
+  <circle r="2.6" fill="#a855f7" filter="url(#glowPurple)">
+    <animateMotion dur="5s" begin="1s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#flowA"/>
+    </animateMotion>
+  </circle>
+  <circle r="2.4" fill="#22c55e" filter="url(#glowGreen)">
+    <animateMotion dur="6s" begin="0.5s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#flowB"/>
+    </animateMotion>
+  </circle>
+  <circle r="2" fill="#f59e0b">
+    <animateMotion dur="7s" begin="2s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#flowB"/>
+    </animateMotion>
+  </circle>
+  <circle r="2.2" fill="#00d4ff">
+    <animateMotion dur="6.5s" begin="1.2s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#voiceArc"/>
+    </animateMotion>
+  </circle>
+  <circle r="2.2" fill="#22c55e">
+    <animateMotion dur="5.5s" begin="0.8s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#screenArc"/>
+    </animateMotion>
+  </circle>
+
+  <g opacity="0.55">
+    <circle r="7" fill="none" stroke="#00d4ff" stroke-width="1.6">
+      <animateMotion dur="8s" repeatCount="indefinite">
+        <mpath href="#flowA"/>
+      </animateMotion>
+      <animate attributeName="opacity" values="0.7;0.15;0.7" dur="8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <g opacity="0.5">
+    <circle r="6" fill="none" stroke="#a855f7" stroke-width="1.4">
+      <animateMotion dur="9s" begin="1s" repeatCount="indefinite">
+        <mpath href="#flowB"/>
+      </animateMotion>
+      <animate attributeName="opacity" values="0.6;0.1;0.6" dur="9s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <g transform="translate(110,335)">
+    <circle r="16" fill="url(#haloAmber)">
+      <animate attributeName="r" values="14;20;14" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="8" fill="#f59e0b" filter="url(#glowGreen)">
+      <animate attributeName="opacity" values="1;0.4;1" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <text x="0" y="34" text-anchor="middle" fill="#f59e0b" font-size="8.5" font-family="Segoe UI, sans-serif" font-weight="700" opacity="0.9">VOZ</text>
+  </g>
+
+  <g transform="translate(690,130)">
+    <circle r="16" fill="url(#haloCyan)">
+      <animate attributeName="r" values="14;20;14" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="8" fill="#00d4ff" filter="url(#glowCyan)">
+      <animate attributeName="opacity" values="1;0.4;1" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="0" y="34" text-anchor="middle" fill="#00d4ff" font-size="8.5" font-family="Segoe UI, sans-serif" font-weight="700" opacity="0.9">IA</text>
+  </g>
+
+  <g transform="translate(690,370)">
+    <circle r="16" fill="url(#haloGreen)">
+      <animate attributeName="r" values="14;20;14" dur="3.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="8" fill="#22c55e" filter="url(#glowGreen)">
+      <animate attributeName="opacity" values="1;0.4;1" dur="2.6s" repeatCount="indefinite"/>
+    </circle>
+    <text x="0" y="34" text-anchor="middle" fill="#22c55e" font-size="8.5" font-family="Segoe UI, sans-serif" font-weight="700" opacity="0.9">PANTALLA</text>
+  </g>
+
+  <g transform="translate(110,100)">
+    <circle r="16" fill="url(#haloPurple)">
+      <animate attributeName="r" values="14;20;14" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="8" fill="#a855f7" filter="url(#glowPurple)">
+      <animate attributeName="opacity" values="1;0.4;1" dur="2.9s" repeatCount="indefinite"/>
+    </circle>
+    <text x="0" y="-22" text-anchor="middle" fill="#a855f7" font-size="8.5" font-family="Segoe UI, sans-serif" font-weight="700" opacity="0.9">APRENDIZAJE</text>
+  </g>
+
+  <g transform="translate(400,225)">
+    <g opacity="0">
+      <line x1="0" y1="0" x2="0" y2="-40" stroke="#00d4ff" stroke-width="1.4"/>
+      <line x1="0" y1="0" x2="28" y2="-28" stroke="#00d4ff" stroke-width="1.4"/>
+      <line x1="0" y1="0" x2="40" y2="0" stroke="#00d4ff" stroke-width="1.4"/>
+      <line x1="0" y1="0" x2="28" y2="28" stroke="#00d4ff" stroke-width="1.4"/>
+      <line x1="0" y1="0" x2="0" y2="40" stroke="#00d4ff" stroke-width="1.4"/>
+      <line x1="0" y1="0" x2="-28" y2="28" stroke="#00d4ff" stroke-width="1.4"/>
+      <line x1="0" y1="0" x2="-40" y2="0" stroke="#00d4ff" stroke-width="1.4"/>
+      <line x1="0" y1="0" x2="-28" y2="-28" stroke="#00d4ff" stroke-width="1.4"/>
+      <animate attributeName="opacity" values="0;0.9;0;0;0;0;0;0" dur="5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="scale" values="0.3;1.6;1.6;1.6;1.6;1.6;1.6;1.6" dur="5s" repeatCount="indefinite"/>
+    </g>
+  </g>
+  <g transform="translate(690,130)">
+    <g opacity="0">
+      <line x1="0" y1="0" x2="0" y2="-22" stroke="#00d4ff" stroke-width="1.2"/>
+      <line x1="0" y1="0" x2="16" y2="0" stroke="#00d4ff" stroke-width="1.2"/>
+      <line x1="0" y1="0" x2="0" y2="22" stroke="#00d4ff" stroke-width="1.2"/>
+      <line x1="0" y1="0" x2="-16" y2="0" stroke="#00d4ff" stroke-width="1.2"/>
+      <animate attributeName="opacity" values="0;0;0;0;0.85;0;0;0" dur="5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="scale" values="0.4;0.4;0.4;0.4;1.8;1.8;1.8;1.8" dur="5s" repeatCount="indefinite"/>
+    </g>
+  </g>
+  <g transform="translate(110,335)">
+    <g opacity="0">
+      <line x1="0" y1="0" x2="0" y2="-22" stroke="#f59e0b" stroke-width="1.2"/>
+      <line x1="0" y1="0" x2="16" y2="0" stroke="#f59e0b" stroke-width="1.2"/>
+      <line x1="0" y1="0" x2="0" y2="22" stroke="#f59e0b" stroke-width="1.2"/>
+      <line x1="0" y1="0" x2="-16" y2="0" stroke="#f59e0b" stroke-width="1.2"/>
+      <animate attributeName="opacity" values="0.85;0;0;0;0;0;0;0" dur="5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="scale" values="0.4;1.8;1.8;1.8;1.8;1.8;1.8;1.8" dur="5s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <text x="400" y="42" text-anchor="middle" fill="#00d4ff" font-size="11" font-family="Segoe UI, sans-serif" font-weight="700" letter-spacing="3">
+    <tspan>
+      GEMINI LIVE · IA CONVERSACIONAL
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="4s" repeatCount="indefinite"/>
+    </tspan>
+  </text>
+
+  <text x="400" y="425" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="Segoe UI, sans-serif" font-weight="600" letter-spacing="2">
+    <tspan>
+      <animate attributeName="opacity" values="1;0.5;1" dur="5s" repeatCount="indefinite"/>
+      TUTOR 24/7
+    </tspan>
+    <tspan dx="14">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="3.5s" repeatCount="indefinite"/>
+      · VOZ EN TIEMPO REAL
+    </tspan>
+    <tspan dx="14">
+      <animate attributeName="opacity" values="1;0.4;1" dur="6s" repeatCount="indefinite"/>
+      · SHARE SCREEN
+    </tspan>
+  </text>
+
+  <g transform="translate(720,32)">
+    <circle r="5" fill="#ef4444" filter="url(#glowCyan)">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="4;6;4" dur="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="10" y="4" fill="#ef4444" font-size="10" font-weight="800" font-family="Segoe UI, sans-serif" letter-spacing="1.5">LIVE</text>
+  </g>
+
+  <g transform="translate(400,225)">
+    <text x="0" y="0" text-anchor="middle" fill="#00d4ff" font-size="46" font-weight="900" font-family="Segoe UI, sans-serif" letter-spacing="4" filter="url(#glowCyan)">
+      <tspan>
+        APRENDE
+        <animate attributeName="opacity" values="0;0;0;0;0.95;0;0;0" dur="7s" repeatCount="indefinite"/>
+        <animate attributeName="font-size" values="28;28;28;28;46;46;46;46" dur="7s" repeatCount="indefinite"/>
+      </tspan>
+    </text>
+  </g>
+
+  <text x="400" y="68" text-anchor="middle" font-size="26" font-weight="900" font-family="Segoe UI, sans-serif" letter-spacing="1.5" fill="url(#titleGrad)">
+    GEMINI LIVE
+  </text>
+
+  <text x="400" y="88" text-anchor="middle" fill="#94a3b8" font-size="10.5" font-family="Segoe UI, sans-serif" font-weight="600" letter-spacing="3">
+    <tspan>
+      PROFESOR VIRTUAL · SUPERASISTENTE · 24/7
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="4.5s" repeatCount="indefinite"/>
+    </tspan>
+  </text>
+
+  <text x="400" y="408" text-anchor="middle" fill="#a855f7" font-size="9.5" font-family="Segoe UI, sans-serif" font-style="italic" font-weight="600" letter-spacing="2">
+    <tspan>
+      by Rubén Sbarsky
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="5.5s" repeatCount="indefinite"/>
+    </tspan>
+  </text>
+
+  <path d="M 12 12 L 12 42 M 12 12 L 42 12" stroke="#00d4ff" stroke-width="1.6" fill="none" opacity="0.7"/>
+  <path d="M 788 12 L 788 42 M 788 12 L 758 12" stroke="#a855f7" stroke-width="1.6" fill="none" opacity="0.7"/>
+  <path d="M 12 438 L 12 408 M 12 438 L 42 438" stroke="#22c55e" stroke-width="1.6" fill="none" opacity="0.7"/>
+  <path d="M 788 438 L 788 408 M 788 438 L 758 438" stroke="#f59e0b" stroke-width="1.6" fill="none" opacity="0.7"/>
+
+</svg>
+</div>
+
+<script>
+(function(){
+  // ---------- SPA NAV ----------
+  const navBtns = document.querySelectorAll('nav#navbar button');
+  const pages = document.querySelectorAll('section.page');
+
+  function showPage(id){
+    pages.forEach(p => p.classList.toggle('active', p.id === id));
+    navBtns.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+    window.scrollTo({top:0, behavior:'smooth'});
+    if(id === 'creditos' || id === 'home'){
+      restartSvgAnimations();
+    }
+  }
+
+  navBtns.forEach(b => b.addEventListener('click', () => showPage(b.dataset.target)));
+
+  // ---------- PROGRESS BAR ----------
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const y = window.scrollY;
+    bar.style.width = h > 0 ? Math.min(100, (y/h)*100) + '%' : '0%';
+    const btn = document.getElementById('toTop');
+    if(y > 320) btn.classList.add('show');
+    else btn.classList.remove('show');
+  }, {passive:true});
+
+  // ---------- BACK TO TOP ----------
+  document.getElementById('toTop').addEventListener('click', () => {
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  // ---------- ACCORDIONS ----------
+  document.querySelectorAll('.acc-head').forEach(h => {
+    h.addEventListener('click', () => {
+      const parent = h.parentElement;
+      parent.classList.toggle('open');
+    });
+  });
+
+  // ---------- SVG CLONE ----------
+  const masterSvg = document.getElementById('gemini-svg');
+  const slotHome = document.getElementById('svg-slot-home');
+  const slotCredits = document.getElementById('svg-slot-credits');
+
+  function cloneSvg(){
+    return masterSvg.cloneNode(true);
+  }
+
+  const homeSvg = cloneSvg();
+  homeSvg.removeAttribute('id');
+  homeSvg.setAttribute('id','gemini-svg-home');
+  slotHome.appendChild(homeSvg);
+
+  const creditsSvg = cloneSvg();
+  creditsSvg.removeAttribute('id');
+  creditsSvg.setAttribute('id','gemini-svg-credits');
+  slotCredits.appendChild(creditsSvg);
+
+  function restartSvgAnimations(){
+    ['gemini-svg-home','gemini-svg-credits'].forEach(id => {
+      const svg = document.getElementById(id);
+      if(!svg) return;
+      try{
+        svg.pauseAnimations && svg.pauseAnimations();
+        svg.setCurrentTime && svg.setCurrentTime(0);
+        svg.unpauseAnimations && svg.unpauseAnimations();
+      }catch(e){}
+    });
+  }
+
+  // ---------- INICIALIZACIÓN ----------
+  showPage('home');
+
+})();
+</script>
+</body>
+</html>
